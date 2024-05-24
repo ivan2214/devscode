@@ -1,5 +1,5 @@
 import {faker} from "@faker-js/faker"
-import {type Tag, type User, type Problem, type Status} from "@prisma/client"
+import {type Tag, type User, type Status} from "@prisma/client"
 
 import {db} from "../lib/db"
 

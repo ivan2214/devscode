@@ -104,5 +104,6 @@ module.exports = {
     "jsx-a11y/heading-has-content": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "off",
     "no-var": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
   },
 }

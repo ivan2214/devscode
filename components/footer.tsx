@@ -1,14 +1,10 @@
-import Link from "next/link";
-import React from "react";
+import Link from "next/link"
+import React from "react"
 
-interface FooterProps {}
-
-export const Footer: React.FC<FooterProps> = ({}) => {
+export const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-4 px-6 md:px-8 flex items-center justify-between">
-      <p className="text-sm">
-        © 2024 Ayuda de Código. Todos los derechos reservados.
-      </p>
+    <footer className="flex items-center justify-between bg-gray-900 px-6 py-4 text-white md:px-8">
+      <p className="text-sm">© 2024 Ayuda de Código. Todos los derechos reservados.</p>
       <nav className="flex items-center space-x-4">
         <Link className="hover:underline" href="#">
           Términos de Servicio
@@ -18,5 +14,5 @@ export const Footer: React.FC<FooterProps> = ({}) => {
         </Link>
       </nav>
     </footer>
-  );
-};
+  )
+}

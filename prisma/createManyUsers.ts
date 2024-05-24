@@ -8,16 +8,17 @@ export const createManyUsers = async (): Promise<User[]> => {
   const randomUsers = faker.number.int({min: 5, max: 10})
 
   for (let i = 0; i < randomUsers; i++) {
+    const hashPassword = await bcrypt.hash("123", 10)
+
     await db.user.create({
       data: {
         username: faker.internet.userName(),
         email: faker.internet.email(),
         image: faker.image.avatar(),
         name: faker.person.fullName(),
+        hashPassword,
       },
     })
-    console.log(`👤 Generando usuarios ${i.toString()}/${randomUsers.toString()}`)
-    console.log("*-------------------------------------------*")
   }
 
   const users = await db.user.findMany()

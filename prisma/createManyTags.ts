@@ -1,4 +1,3 @@
-import {faker} from "@faker-js/faker"
 import {type Tag} from "@prisma/client"
 
 import {db} from "../lib/db"

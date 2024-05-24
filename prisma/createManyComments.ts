@@ -14,14 +14,14 @@ export const createManyComments = async (users: User[], problemId: string): Prom
     const comment = await db.comment.create({
       data: {
         content: faker.lorem.sentence(),
-        userId,
+        authorId: userId,
         problemId,
       },
     })
 
     if (
       userRepliedComment !== userId &&
-      userRepliedComment !== comment.userId &&
+      userRepliedComment !== comment.authorId &&
       userRepliedComment
     ) {
       await db.reply.create({
@@ -32,8 +32,5 @@ export const createManyComments = async (users: User[], problemId: string): Prom
         },
       })
     }
-
-    console.log(`Comentario ${i.toString()}/${randomComments.toString()}`)
-    console.log("*-------------------------------------------*")
   }
 }
