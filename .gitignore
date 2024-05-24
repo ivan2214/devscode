@@ -38,5 +38,5 @@ next-env.d.ts
 
 # Migrations files prisma
 
-/prisma/migrations
+prisma/migrations
 prisma/migrations/*
