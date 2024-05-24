@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+
+  username String?
+  name     String
+  image    String?
+
+  problems         Problem[]
+  comments         Comment[]
+  problemsResolved ProblemsResolved[]
+
+  reply Reply[]
+}
+
+// Modelo de datos para los problemas (publicaciones)
+model Problem {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    Status   @default(open)
+  likes     Int      @default(0)
+  dislikes  Int      @default(0)
+  views     Int      @default(0)
+
+  title       String
+  description String
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  tags             Tag[]
+  ProblemsResolved ProblemsResolved[]
+
+  comments Comment[]
+
+  @@index([userId])
+}
+
+// Modelo de datos para los comentarios a los problemas
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  problem   Problem @relation(fields: [problemId], references: [id])
+  problemId String
+  reply     Reply[]
+
+  @@index([userId])
+  @@index([problemId])
+}
+
+model Tag {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  problems  Problem[]
+}
+
+// Enumeración para el estado del problema
+enum Status {
+  open
+  closed
+  solved
+  unsolved
+}
+
+model ProblemsResolved {
+  id         String   @id @default(uuid())
+  resolvedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  problemId  String
+  resolver   User     @relation(fields: [resolverId], references: [id])
+  resolverId String
+
+  @@index([problemId])
+  @@index([resolverId])
+}
+
+model Reply {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  userReply   User   @relation(fields: [userIdReply], references: [id])
+  userIdReply String
+
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+
+  @@index([commentId])
+  @@index([userIdReply])
+}
