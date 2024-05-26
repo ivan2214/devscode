@@ -29,6 +29,7 @@ export const CreateProblemSchema = z.object({
       }),
     )
     .optional(),
+  code: z.string().max(10000).optional(),
 })
 
 export const UpdateProblemSchema = CreateProblemSchema.partial()

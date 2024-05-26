@@ -28,17 +28,20 @@ import {Input} from "@/components/ui/input"
 
 import {Textarea} from "../ui/textarea"
 
+import ProblemDetails from "./problem-details"
+
 export type CreateProblemFormValues = z.infer<typeof CreateProblemSchema>
 
 export type UpdateProblemFormValues = z.infer<typeof UpdateProblemSchema>
 
-export const ProblemForm = () => {
+export const ProblemForm: React.FC = () => {
   const {close, data} = useCreateProblemModal()
   const [isPending, startTransition] = useTransition()
   const defaultValues: CreateProblemFormValues = {
     title: data?.values?.title ?? "",
     description: data?.values?.description ?? "",
     tagNames: data?.values?.tagNames ?? [],
+    code: data?.values?.code ?? "",
   }
 
   const form = useForm<CreateProblemFormValues>({
@@ -72,13 +75,13 @@ export const ProblemForm = () => {
     return null
   }
 
-  function onSubmit(values: CreateProblemFormValues) {
+  const onSubmit = (values: CreateProblemFormValues) => {
     startTransition(() => {
       if (!data?.problemId) {
         createProblem(values).then((res) => {
           if (res.error) {
             toast("Error", {
-              description: "Error al crear la queja",
+              description: "Error al crear el problema",
               action: {
                 label: "Reintentar",
                 onClick: () => {
@@ -90,30 +93,26 @@ export const ProblemForm = () => {
 
           if (res.success) {
             toast("Success", {
-              description: "Queja creada correctamente",
+              description: "Problema creado correctamente",
             })
             close()
             router.refresh()
           }
         })
-      }
-
-      if (data?.problemId && data.values) {
-        startTransition(() => {
-          updateProblem(values, data.problemId).then((res) => {
-            if (res.error) {
-              toast("Error", {
-                description: res.error,
-              })
-            }
-            if (res.success) {
-              toast("Success", {
-                description: "Queja actualizada correctamente",
-                closeButton: true,
-                position: "top-center",
-              })
-            }
-          })
+      } else if (data?.problemId && data.values) {
+        updateProblem(values, data.problemId).then((res) => {
+          if (res.error) {
+            toast("Error", {
+              description: res.error,
+            })
+          }
+          if (res.success) {
+            toast("Success", {
+              description: "Problema actualizado correctamente",
+              closeButton: true,
+              position: "top-center",
+            })
+          }
         })
       }
     })
@@ -121,8 +120,14 @@ export const ProblemForm = () => {
 
   const categories = form.watch("tagNames") as {name: string}[]
 
-  const buttonTitle = data?.problemId ? "Actualizar Queja" : "Crear Queja"
-  const buttonLoadingTitle = data?.problemId ? "Actualizando Queja" : "Creando Queja"
+  const buttonTitle = data?.problemId ? "Actualizar problema" : "Crear problema"
+  const buttonLoadingTitle = data?.problemId ? "Actualizando problema" : "Creando problema"
+
+  const formValues = form.getValues()
+
+  console.log({
+    ...formValues,
+  })
 
   return (
     <Form {...form}>
@@ -149,16 +154,30 @@ export const ProblemForm = () => {
               <FormItem>
                 <FormLabel>Descripción</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Descripción" rows={5} {...field} />
+                  <Textarea placeholder="Descripción" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="code"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>Tu código</FormLabel>
+                <FormControl>
+                  <ProblemDetails field={{...field}} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </section>
-        {/* Categories */}
+
+        {/* Categorías */}
         <section>
-          {categoryFields?.map((field, index) => (
+          {categoryFields.map((field, index) => (
             <FormField
               key={field.id}
               control={form.control}

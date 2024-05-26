@@ -46,14 +46,14 @@ export const ButtonDeleteProblem: React.FC<ButtonDeleteProblemProps> = ({problem
       <AlertDialogTrigger asChild>
         <Button className="flex items-center gap-x-2" variant="outline">
           <TrashIcon className="h-4 w-4" />
-          Borrar queja
+          Borrar problema
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Estas seguro de eliminar esta queja?</AlertDialogTitle>
+          <AlertDialogTitle>Estas seguro de eliminar esta problema?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer. Esto eliminará permanentemente la queja y eliminará
+            Esta acción no se puede deshacer. Esto eliminará permanentemente la problema y eliminará
             sus datos de nuestros servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -61,7 +61,7 @@ export const ButtonDeleteProblem: React.FC<ButtonDeleteProblemProps> = ({problem
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction className="bg-destructive text-white" onClick={onClick}>
             {isPending ? <LoaderIcon className="h-4 w-4 animate-spin" /> : null}
-            {isPending ? "Eliminando..." : "Eliminar queja"}
+            {isPending ? "Eliminando..." : "Eliminar problema"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

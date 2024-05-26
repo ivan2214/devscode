@@ -14,7 +14,7 @@ export const updateProblem = async (values: UpdateProblemFormValues, problemId: 
     return {error: "Algo salio mal!"}
   }
 
-  // Verificar si se proporcionó el ID de la queja
+  // Verificar si se proporcionó el ID de la problema
   if (!problemId) return {error: "Algo salio mal!"}
 
   // Extraer los campos validados
@@ -33,7 +33,7 @@ export const updateProblem = async (values: UpdateProblemFormValues, problemId: 
       },
     })
 
-    // Actualizar la queja en la base de datos
+    // Actualizar la problema en la base de datos
     await db.problem.update({
       where: {
         id: problemId,
@@ -58,9 +58,9 @@ export const updateProblem = async (values: UpdateProblemFormValues, problemId: 
     })
 
     // Devolver un mensaje de éxito
-    return {success: "Queja actualizada correctamente!"}
+    return {success: "problema actualizada correctamente!"}
   } catch (error) {
-    return {error: "Se produjo un error al actualizar la queja"}
+    return {error: "Se produjo un error al actualizar la problema"}
   } finally {
     revalidatePath("/problem/[problemId]")
   }

@@ -8,7 +8,7 @@ export default async function Home() {
   const {problems} = await getProblems()
 
   return (
-    <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
+    <main className="container px-4 sm:px-6 lg:px-8">
       <section className="flex items-start justify-between py-8">
         <SideFilter />
         <section className="w-full flex-1 ">

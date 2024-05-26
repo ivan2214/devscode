@@ -16,6 +16,7 @@ export const createManyProblems = async (tags: Tag[], users: User[]): Promise<st
 
     const problem = await db.problem.create({
       data: {
+        createdAt: faker.date.past(),
         title: faker.lorem.sentence(),
         description: faker.lorem.paragraphs(3),
         status,

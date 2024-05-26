@@ -13,6 +13,7 @@ import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import Icon from "@/components/ui/icon"
 import {type ProblemExtended} from "@/data/problem/get-problems"
+import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 
 interface CardProblemProps {
   problem: ProblemExtended
@@ -29,20 +30,26 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
           </div>
           <div className="flex items-center gap-x-2">
             {problem.tags.map((tag) => (
-              <Badge key={tag.id}>{tag.name}</Badge>
+              <Badge key={tag.id} className="uppercase">
+                {tag.name}
+              </Badge>
             ))}
           </div>
         </CardHeader>
         <CardContent>
-          <CardDescription>{problem.description}</CardDescription>
+          <CardDescription className="truncate">{problem.description}</CardDescription>
         </CardContent>
         <CardFooter>
           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-            <Icon className="h-4 w-4" name="user" />
+            <Avatar>
+              <AvatarImage alt="@shadcn" src={problem.user?.image ?? ""} />
+              <AvatarFallback>{problem.user?.name[0]}</AvatarFallback>
+            </Avatar>
             <span>{problem.user?.name}</span>
             <Separator orientation="vertical" />
             <span>
-              A las {problem.createdAt.getHours()}:{problem.createdAt.getMinutes()}{" "}
+              creado el {problem.createdAt.toLocaleDateString()}A las {problem.createdAt.getHours()}
+              :{problem.createdAt.getMinutes()}{" "}
             </span>
           </div>
           <Button size="sm" variant="ghost">
