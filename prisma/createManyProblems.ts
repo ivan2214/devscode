@@ -12,7 +12,7 @@ export const createManyProblems = async (tags: Tag[], users: User[]): Promise<st
     const status: Status = faker.helpers.arrayElement(["open", "closed", "solved", "unsolved"])
     const userProblemResolved = users[Math.floor(Math.random() * users.length)]
     const isResolved: boolean = faker.helpers.arrayElement([true, false])
-    const tagsRandoms = faker.helpers.arrayElements(tags, faker.number.int({min: 1, max: 3}))
+    const randomTags = faker.helpers.shuffle(tags).slice(0, faker.number.int({min: 1, max: 3}))
 
     const problem = await db.problem.create({
       data: {
@@ -22,7 +22,13 @@ export const createManyProblems = async (tags: Tag[], users: User[]): Promise<st
         status,
         userId,
         tags: {
-          connect: tagsRandoms.map((tag) => ({id: tag.id})),
+          createMany: {
+            data: randomTags.map((tag) => {
+              return {
+                tagId: tag.id,
+              }
+            }),
+          },
         },
         likes: faker.number.int({min: 0, max: 100}),
         dislikes: faker.number.int({min: 0, max: 100}),

@@ -74,7 +74,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
   const selectedFilterValues = searchParams.get("filter")
   const router = useRouter()
 
-  const handleCategoryClick = (tagValue: string) => {
+  const handleTagClick = (tagValue: string) => {
     const newParams = new URLSearchParams(searchParams?.toString())
     const updatedTags = [...selectedTags]
     const tagIndex = updatedTags.indexOf(tagValue)
@@ -127,7 +127,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
           Inicio
         </Link>
         <MenubarMenu>
-          <MenubarTrigger className="font-bold">problemas</MenubarTrigger>
+          <MenubarTrigger className="font-bold">Problemas</MenubarTrigger>
           <MenubarContent>
             <MenubarItem>
               <Link href="/problems">problemas</Link>
@@ -178,7 +178,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
             <MenubarSeparator />
             <MenubarSub>
               <MenubarSubTrigger>Tags</MenubarSubTrigger>
-              <MenubarSubContent className="w-[230px]">
+              <MenubarSubContent className="h-32 w-[230px] overflow-y-auto">
                 {tags?.map((tag) => (
                   <MenubarItem
                     key={tag.id}
@@ -188,7 +188,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
                         "underline decoration-primary underline-offset-4",
                     )}
                     onClick={() => {
-                      handleCategoryClick(tag.name)
+                      handleTagClick(tag.name)
                     }}
                   >
                     {tag.name}
@@ -205,7 +205,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
         </Suspense>
         {!user && <AuthButtons />}
         {user ? <MenuUser user={user} /> : null}
-        <Button role="link" type="button" variant="link">
+        <Button role="link" type="button" variant="outline">
           <Link href="/ask">Publicar problem</Link>
         </Button>
         <ModeToggle />

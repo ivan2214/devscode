@@ -118,7 +118,7 @@ export const ProblemForm: React.FC = () => {
     })
   }
 
-  const categories = form.watch("tagNames") as {name: string}[]
+  const tags = form.watch("tagNames") as {name: string}[]
 
   const buttonTitle = data?.problemId ? "Actualizar problema" : "Crear problema"
   const buttonLoadingTitle = data?.problemId ? "Actualizando problema" : "Creando problema"
@@ -208,13 +208,13 @@ export const ProblemForm: React.FC = () => {
               Añadir categoria
             </Button>
 
-            {categories.length > 0 && (
+            {tags.length > 0 && (
               <Button
                 className="mt-2"
                 size="sm"
                 type="button"
                 variant="outline"
-                onClick={() => removeCategory(categories.length - 1)}
+                onClick={() => removeCategory(tags.length - 1)}
               >
                 Eliminar categoria
               </Button>

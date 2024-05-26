@@ -67,15 +67,15 @@ model Problem {
 
   title       String
   description String
-  code        String @db.VarChar(10000)
+  code        String? @db.VarChar(10000)
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
-  tags             Tag[]
   ProblemsResolved ProblemsResolved[]
 
   comments Comment[]
+  tags     TagsOnProblem[]
 
   @@index([userId])
 }
@@ -103,11 +103,12 @@ model Comment {
 }
 
 model Tag {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
-  problems  Problem[]
+
+  problems TagsOnProblem[]
 }
 
 // Enumeración para el estado del problema
@@ -144,4 +145,17 @@ model Reply {
 
   @@index([commentId])
   @@index([userIdReply])
+}
+
+model TagsOnProblem {
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  problemId String
+
+  asignedAt DateTime @default(now())
+
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  @@id([problemId, tagId])
+  @@index([tagId])
 }
