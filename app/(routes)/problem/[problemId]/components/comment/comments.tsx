@@ -1,11 +1,11 @@
 import {auth} from "auth"
-import {type ProblemExtended} from "@/data/problem/get-problems"
+import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 
 import {Comment} from "./comment"
 import {CommentForm} from "./comment-form"
 
 interface CommentsProps {
-  problem: ProblemExtended
+  problem: ProblemExtends
   isAuthorProblem?: boolean
 }
 

@@ -45,6 +45,6 @@ export const createComment = async (values: CreateCommentFormValues) => {
   } catch (error) {
     return {error: "Algo salio mal!"}
   } finally {
-    revalidatePath("/problem/[problemId]")
+    revalidatePath(`/problem/${problemId}`)
   }
 }

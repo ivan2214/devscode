@@ -3,6 +3,37 @@ import {type Tag, type User, type Status} from "@prisma/client"
 
 import {db} from "../lib/db"
 
+const code = ` if (!problemId) {
+  return <div>Problem not found</div>
+}
+
+const problem = await db.problem.findUnique({
+  where: {
+    id: problemId,
+  },
+  include: {
+    comments: {
+      include: {
+        author: true,
+        reply: true,
+      },
+      orderBy: {
+        likes: "desc",
+      },
+    },
+    tags: {
+      include: {
+        tag: true,
+      },
+    },
+    user: true,
+  },
+})
+
+if (!problem) {
+  return <div>Problem not found</div>
+}`
+
 export const createManyProblems = async (tags: Tag[], users: User[]): Promise<string[]> => {
   const problemsIds: string[] = []
   const randomProblems = faker.number.int({min: 5, max: 25})
@@ -30,6 +61,7 @@ export const createManyProblems = async (tags: Tag[], users: User[]): Promise<st
             }),
           },
         },
+        code: code,
         likes: faker.number.int({min: 0, max: 100}),
         dislikes: faker.number.int({min: 0, max: 100}),
         views: faker.number.int({min: 0, max: 100}),

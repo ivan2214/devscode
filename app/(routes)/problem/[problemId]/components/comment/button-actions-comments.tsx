@@ -11,10 +11,10 @@ import {toast} from "sonner"
 import {Button} from "@/components/ui/button"
 import {CommentActionSchema} from "@/schemas"
 import {actionsComment} from "@/actions/comment/actions-comment"
-import {type CommentExtend} from "@/data/problem/get-problems"
+import {type CommentExtends} from "@/data/problem/get-filtered-problems"
 
 interface ButtonActionsCommentsProps {
-  comment: CommentExtend
+  comment?: CommentExtends
 }
 
 export type CommentActionFormValues = z.infer<typeof CommentActionSchema>
@@ -24,7 +24,7 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({com
   const form = useForm<CommentActionFormValues>({
     resolver: zodResolver(CommentActionSchema),
     defaultValues: {
-      commentId: comment.id,
+      commentId: comment?.id,
       problemId: comment?.problemId || undefined,
     },
   })
@@ -57,11 +57,11 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({com
       >
         <ThumbsUpIcon className="h-4 w-4" />
         <span className="sr-only">Like</span>
-        {comment.likes >= 0 && comment.likes}
+        {comment && comment?.likes >= 0 ? comment?.likes : null}
       </Button>
 
       <Button
-        className="transition duration-300 hover:bg-secondary-foreground/50 hover:text-primary-foreground"
+        className="flex gap-x-2 transition duration-300 hover:bg-secondary-foreground/50 hover:text-primary-foreground"
         disabled={isPending}
         size="icon"
         type="button"
@@ -73,6 +73,8 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({com
         }}
       >
         <ThumbsDownIcon className="h-4 w-4" />
+        <span className="sr-only">Dislike</span>
+        {comment && comment?.dislikes >= 0 ? comment?.dislikes : null}
       </Button>
     </section>
   )

@@ -13,16 +13,16 @@ export default async function ProblemsPage({searchParams}: {searchParams?: Query
   const hasQuery = searchParams && Object.keys(searchParams).length > 0
 
   return (
-    <main className="col-span-5 border-t lg:col-span-4 lg:border-l">
+    <main className="w-full border-t lg:col-span-4 lg:border-l">
       <section className="h-full px-4 py-6 lg:px-8">
         <div className="flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between">
           <Suspense fallback={<SearchBarFallback />}>
             <SearchBar />
           </Suspense>
           <div className="space-y-1">
-            <h2 className="text-2xl font-semibold tracking-tight">Listado de ofertas</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Lista de problemas</h2>
             <p className="text-sm text-muted-foreground">
-              Encuentra las mejores ofertas, descuentos y promociones.
+              Encontra los problems que estás buscando.
             </p>
           </div>
         </div>
@@ -31,10 +31,14 @@ export default async function ProblemsPage({searchParams}: {searchParams?: Query
 
         <Separator className="my-4" />
 
-        <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-4 md:grid-cols-2 md:p-6 lg:grid-cols-3 xl:grid-cols-4">
-          {problems.map((problem) => (
-            <CardProblem key={problem.id} problem={problem} />
-          ))}
+        <section className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+          {problems.length ? (
+            problems.map((problem) => <CardProblem key={problem.id} problem={problem} />)
+          ) : (
+            <section>
+              <p>No se encontraron problemas</p>
+            </section>
+          )}
         </section>
       </section>
     </main>

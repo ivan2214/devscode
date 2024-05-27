@@ -24,6 +24,8 @@ export const actionsComment = async (values: CommentActionFormValues) => {
       },
     })
 
+    console.log(userLikeId)
+
     if (!comment) {
       return {error: "Comentario no encontrado"}
     }
@@ -38,20 +40,34 @@ export const actionsComment = async (values: CommentActionFormValues) => {
       return {error: "Debe iniciar sesion para realizar esta accion!"}
     }
 
-    await db.comment.update({
-      where: {
-        id: commentId,
-      },
-      data: {
-        likes: action === "like" ? {increment: 1} : {decrement: 1},
-        dislikes: action === "unlike" ? {increment: 1} : {decrement: 1},
-      },
-    })
+    if (action === "like") {
+      await db.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          likes: {increment: 1},
+        },
+      })
+    }
+
+    if (action === "unlike") {
+      await db.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          dislikes: {increment: 1},
+        },
+      })
+    }
 
     return {success: "Comentario actualizado"}
   } catch (error) {
+    console.log(error)
+
     return {error: "Algo salio mal!"}
   } finally {
-    revalidatePath("/problem/[problemId]")
+    revalidatePath(`/problem/${problemId}`)
   }
 }

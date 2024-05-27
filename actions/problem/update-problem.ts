@@ -42,17 +42,14 @@ export const updateProblem = async (values: UpdateProblemFormValues, problemId: 
         description,
         title,
         tags: {
-          upsert: tag?.map((tag) => ({
-            where: {
-              id: tag.id,
-            },
-            create: {
-              name: tag.name,
-            },
-            update: {
-              id: tag.id,
-            },
-          })),
+          createMany: {
+            data: tag.map((tag) => {
+              return {
+                tagId: tag.id,
+              }
+            }),
+            skipDuplicates: true,
+          },
         },
       },
     })
@@ -62,6 +59,6 @@ export const updateProblem = async (values: UpdateProblemFormValues, problemId: 
   } catch (error) {
     return {error: "Se produjo un error al actualizar la problema"}
   } finally {
-    revalidatePath("/problem/[problemId]")
+    revalidatePath(`/problem/${problemId}`)
   }
 }

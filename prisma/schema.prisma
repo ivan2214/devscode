@@ -133,12 +133,16 @@ model ProblemsResolved {
 }
 
 model Reply {
-  id        String   @id @default(uuid())
-  content   String   @db.Text
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  content     String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  anonymous   Boolean  @default(false)
+  likes       Int      @default(0)
+  dislikes    Int      @default(0)
 
-  userReply   User   @relation(fields: [userIdReply], references: [id])
-  userIdReply String
+  userReply   User?     @relation(fields: [userIdReply], references: [id])
+  userIdReply String?
 
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String

@@ -4,11 +4,11 @@ import {revalidatePath} from "next/cache"
 
 import {db} from "@/lib/db"
 
-export const deleteComment = async (commentId: string) => {
+export const deleteComment = async (id: string, problemId: string) => {
   try {
     await db.comment.delete({
       where: {
-        id: commentId,
+        id: id,
       },
     })
 
@@ -16,6 +16,6 @@ export const deleteComment = async (commentId: string) => {
   } catch (error) {
     return {error: "Algo salio mal!"}
   } finally {
-    revalidatePath("/complaint/[complaintId]")
+    revalidatePath(`/problem/${problemId}`)
   }
 }

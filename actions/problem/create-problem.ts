@@ -34,9 +34,12 @@ export const createProblem = async (values: CreateProblemFormValues) => {
       title,
       userId,
       tags: {
-        create: tags.map((tag) => ({
-          name: tag.name,
-        })),
+        createMany: {
+          data: tags.map((tag) => ({
+            tagId: tag.id,
+          })),
+          skipDuplicates: true,
+        },
       },
     },
   })

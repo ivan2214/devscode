@@ -6,6 +6,7 @@ import {
   type Status,
   type Problem,
   type TagsOnProblem,
+  type Reply,
 } from "@prisma/client"
 
 import {db} from "@/lib/db"
@@ -20,6 +21,11 @@ export interface QueryProps {
 
 export interface CommentExtends extends Comment {
   author?: User | null
+  reply?: ReplyExtends[] | null
+}
+
+export interface ReplyExtends extends Reply {
+  userReply?: User | null
 }
 
 export interface TagsOnProblemExtends extends TagsOnProblem {
@@ -90,7 +96,13 @@ export const getFilteredProblems = async (
         AND: [
           where,
           {
-            OR: [{title: {contains: keyword ?? ""}}, {description: {contains: keyword ?? ""}}],
+            OR: [
+              {title: {contains: keyword ?? ""}},
+              {description: {contains: keyword ?? ""}},
+              {
+                tags: {some: {tag: {name: {contains: keyword ?? ""}}}},
+              },
+            ],
           },
         ],
       },
@@ -104,6 +116,11 @@ export const getFilteredProblems = async (
         comments: {
           include: {
             author: true,
+            reply: {
+              include: {
+                userReply: true,
+              },
+            },
           },
         },
       },

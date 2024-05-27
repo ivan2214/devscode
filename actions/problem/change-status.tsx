@@ -31,6 +31,6 @@ export const changeStatus = async (data: ChangeStatusFormValues) => {
   } catch (error) {
     return {error: "Algo salio mal!"}
   } finally {
-    revalidatePath("/problem/[problemId]")
+    revalidatePath(`/problem/${problemId}`)
   }
 }

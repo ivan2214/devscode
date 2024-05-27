@@ -1,11 +1,14 @@
 import Link from "next/link"
 import {ClockIcon, FlagIcon, MailIcon, ShareIcon, TagIcon, UserIcon} from "lucide-react"
+import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
+import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
+import hljs from "highlight.js"
 
 import {auth} from "auth"
 import {Button} from "@/components/ui/button"
 import {db} from "@/lib/db"
 import {type CreateProblemFormValues} from "@/components/problem/problem-form"
-import {type ProblemExtended} from "@/data/problem/get-problems"
+import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 
 import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
 import {ButtonChangeStatus} from "./components/button-change-status"
@@ -44,14 +47,25 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
       id: problemId,
     },
     include: {
-      user: true,
-      tags: true,
       comments: {
         include: {
           author: true,
-          reply: true,
+          reply: {
+            include: {
+              userReply: true,
+            },
+          },
+        },
+        orderBy: {
+          likes: "desc",
         },
       },
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      user: true,
     },
   })
 
@@ -64,17 +78,23 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
   const values: CreateProblemFormValues = {
     description: problem.description,
     title: problem.title,
-    tagNames: problem.tags.map((tag) => ({
-      name: tag.name,
+    tagNames: problem.tags.map((tags) => ({
+      name: tags.tag.name,
     })),
   }
 
-  const creatorName = (user?: ProblemExtended["user"] | null) => {
+  const creatorName = (user?: ProblemExtends["user"] | null) => {
     if (user) {
       return user.name || user.username || "Anónimo"
     }
 
     return "Anónimo"
+  }
+
+  const detectLanguage = (content: string): string => {
+    const language = hljs.highlightAuto(content).language
+
+    return language || "bash"
   }
 
   return (
@@ -97,9 +117,9 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               <div className="flex items-center gap-2">
                 <TagIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Categorías:</span>
-                {problem.tags.map((tag) => (
-                  <span key={tag.id} className="text-sm text-gray-500 dark:text-gray-400">
-                    {tag.name}
+                {problem.tags.map((tags) => (
+                  <span key={tags.tag.id} className="text-sm text-gray-500 dark:text-gray-400">
+                    {tags.tag.name}
                   </span>
                 ))}
               </div>
@@ -134,6 +154,24 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               </div>
             </div>
           </div>
+
+          {/* Codigo */}
+          {problem.code ? (
+            <div className="prose relative h-fit max-h-64 w-full flex-grow resize-none overflow-y-auto rounded">
+              <div className="absolute right-0 top-0 rounded rounded-t-sm bg-gray-800 px-2 py-1 text-xs text-gray-500">
+                Detected Language: {detectLanguage(problem.code)}
+              </div>
+              <SyntaxHighlighter
+                customStyle={{
+                  borderRadius: "0.25rem",
+                }}
+                language={detectLanguage(problem.code)}
+                style={vscDarkPlus}
+              >
+                {problem.code}
+              </SyntaxHighlighter>
+            </div>
+          ) : null}
 
           {/* Comments */}
           <Comments isAuthorProblem={isAuthorProblem} problem={problem} />

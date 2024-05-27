@@ -23,8 +23,8 @@ export const SearchBar = () => {
     } else {
       newParams.delete("keyword")
     }
-    const includesOfferPage = pathname?.includes("complaints")
-    const pathNameDefined = !includesOfferPage ? `/complaints${pathname}` : pathname
+    const includesOfferPage = pathname?.includes("problems")
+    const pathNameDefined = !includesOfferPage ? `/problems${pathname}` : pathname
 
     router.push(createUrl(pathNameDefined, newParams))
     router.refresh()
@@ -41,7 +41,7 @@ export const SearchBar = () => {
             className="pl-8"
             defaultValue={searchParams?.get("keyword") ?? ""}
             name="search"
-            placeholder="Buscar productos..."
+            placeholder="Buscar..."
             type="search"
           />
         </div>

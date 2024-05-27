@@ -8,26 +8,29 @@ import {Button} from "@/components/ui/button"
 import {deleteComment} from "@/actions/comment/delete-comment"
 
 interface ButtonCommentDeleteProps {
-  commentId: string
+  commentId?: string
+  problemId?: string
 }
 
-export const ButtonCommentDelete: React.FC<ButtonCommentDeleteProps> = ({commentId}) => {
+export const ButtonCommentDelete: React.FC<ButtonCommentDeleteProps> = ({commentId, problemId}) => {
   const [isPending, startTransition] = useTransition()
   const onClick = () => {
     startTransition(() => {
-      deleteComment(commentId).then((res) => {
-        if (res?.error) {
-          toast("Error", {
-            description: res?.error,
-          })
-        }
+      if (problemId) {
+        deleteComment(commentId, problemId).then((res) => {
+          if (res?.error) {
+            toast("Error", {
+              description: res?.error,
+            })
+          }
 
-        if (res?.success) {
-          toast("Comentario eliminado", {
-            description: res?.success,
-          })
-        }
-      })
+          if (res?.success) {
+            toast("Comentario eliminado", {
+              description: res?.success,
+            })
+          }
+        })
+      }
     })
   }
 

@@ -22,7 +22,7 @@ export const ButtonOpenModalEdit: React.FC<ButtonOpenModalEditProps> = ({problem
       onClick={() => openEditModal(problemId, values)}
     >
       <PencilIcon className="h-4 w-4" />
-      Edit Complaint
+      Editar problema
     </Button>
   )
 }
