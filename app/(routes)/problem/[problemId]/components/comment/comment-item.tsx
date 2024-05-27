@@ -120,7 +120,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
       {permitedDelete ? (
         <ButtonCommentDelete commentId={comment?.id} problemId={comment?.problemId} />
       ) : null}
-      <ButtonActionsComments comment={comment} />
+      <ButtonActionsComments comment={comment} isReply={isReply} reply={reply} />
     </div>
   )
 }

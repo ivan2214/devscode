@@ -42,7 +42,9 @@ export const CreateCommentSchema = z.object({
 })
 
 export const CommentActionSchema = z.object({
-  commentId: z.coerce.string().min(1),
+  commentId: z.coerce.string().optional(),
+  replyId: z.coerce.string().optional(),
+  isReply: z.boolean().optional(),
   action: z.enum(["like", "unlike"]),
   problemId: z.coerce.string(),
 })

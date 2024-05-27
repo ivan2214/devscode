@@ -11,20 +11,50 @@ import {toast} from "sonner"
 import {Button} from "@/components/ui/button"
 import {CommentActionSchema} from "@/schemas"
 import {actionsComment} from "@/actions/comment/actions-comment"
-import {type CommentExtends} from "@/data/problem/get-filtered-problems"
+import {type ReplyExtends, type CommentExtends} from "@/data/problem/get-filtered-problems"
 
 interface ButtonActionsCommentsProps {
   comment?: CommentExtends
+  isReply?: boolean
+  reply?: ReplyExtends
 }
 
 export type CommentActionFormValues = z.infer<typeof CommentActionSchema>
 
-export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({comment}) => {
+interface GetLikesProps {
+  comment?: CommentExtends
+  reply?: ReplyExtends
+  isReply?: boolean
+}
+
+export const getLikes = ({comment, isReply, reply}: GetLikesProps) => {
+  if (isReply) {
+    return reply?.likes
+  }
+
+  return comment?.likes
+}
+
+export const getDislikes = ({comment, isReply, reply}: GetLikesProps) => {
+  if (isReply) {
+    return reply?.dislikes
+  }
+
+  return comment?.dislikes
+}
+
+export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({
+  comment,
+  isReply,
+  reply,
+}) => {
   const [isPending, startTransition] = useTransition()
   const form = useForm<CommentActionFormValues>({
     resolver: zodResolver(CommentActionSchema),
     defaultValues: {
       commentId: comment?.id,
+      replyId: reply?.id,
+      isReply: Boolean(isReply),
       problemId: comment?.problemId || undefined,
     },
   })
@@ -57,7 +87,7 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({com
       >
         <ThumbsUpIcon className="h-4 w-4" />
         <span className="sr-only">Like</span>
-        {comment && comment?.likes >= 0 ? comment?.likes : null}
+        {getLikes({comment, isReply, reply})}
       </Button>
 
       <Button
@@ -74,7 +104,7 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({com
       >
         <ThumbsDownIcon className="h-4 w-4" />
         <span className="sr-only">Dislike</span>
-        {comment && comment?.dislikes >= 0 ? comment?.dislikes : null}
+        {getDislikes({comment, isReply, reply})}
       </Button>
     </section>
   )

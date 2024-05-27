@@ -1,5 +1,6 @@
 "use server"
 import {revalidatePath} from "next/cache"
+import {type Reply, type Comment} from "@prisma/client"
 
 import {db} from "@/lib/db"
 import {CommentActionSchema} from "@/schemas"
@@ -15,32 +16,39 @@ export const actionsComment = async (values: CommentActionFormValues) => {
     return {error: "Algo salio mal!"}
   }
 
-  const {commentId, action, problemId} = validatedFields.data
+  const {action, problemId, commentId, replyId, isReply} = validatedFields.data
 
   try {
-    const comment = await db.comment.findUnique({
-      where: {
-        id: commentId,
-      },
-    })
+    let comment: Comment | null = null
+    let reply: Reply | null = null
 
-    console.log(userLikeId)
-
-    if (!comment) {
-      return {error: "Comentario no encontrado"}
+    if (!isReply && commentId) {
+      comment = await db.comment.findUnique({
+        where: {
+          id: commentId,
+        },
+      })
     }
 
-    if (!problemId) return {error: "Algo sasdasalio mal!!!"}
-
-    //verificar que no puedo darme me gusta a mi mismo
-
-    if (comment.authorId === userLikeId) return {error: "No puedes dar like a tu propio comentario"}
-
-    if (!userLikeId || userLikeId === undefined || userLikeId === null) {
-      return {error: "Debe iniciar sesion para realizar esta accion!"}
+    if (isReply && replyId) {
+      reply = await db.reply.findUnique({
+        where: {
+          id: replyId,
+        },
+      })
     }
 
-    if (action === "like") {
+    if (!userLikeId) return {error: "Debe iniciar sesion para realizar esta accion!"}
+
+    if (!problemId) return {error: "Algo salio mal!!!"}
+
+    if (reply?.userIdReply === userLikeId)
+      return {error: "No puedes dar like a tu propio comentario!"}
+
+    if (comment?.authorId === userLikeId)
+      return {error: "No puedes dar like a tu propio comentario!"}
+
+    if (action === "like" && !isReply && comment) {
       await db.comment.update({
         where: {
           id: commentId,
@@ -51,7 +59,7 @@ export const actionsComment = async (values: CommentActionFormValues) => {
       })
     }
 
-    if (action === "unlike") {
+    if (action === "unlike" && !isReply && comment) {
       await db.comment.update({
         where: {
           id: commentId,
@@ -62,11 +70,31 @@ export const actionsComment = async (values: CommentActionFormValues) => {
       })
     }
 
+    if (action === "like" && isReply && reply) {
+      await db.reply.update({
+        where: {
+          id: replyId,
+        },
+        data: {
+          likes: {increment: 1},
+        },
+      })
+    }
+
+    if (action === "unlike" && isReply && reply) {
+      await db.reply.update({
+        where: {
+          id: replyId,
+        },
+        data: {
+          dislikes: {increment: 1},
+        },
+      })
+    }
+
     return {success: "Comentario actualizado"}
   } catch (error) {
-    console.log(error)
-
-    return {error: "Algo salio mal!"}
+    return {error: "Algo salio mal!!!!!!"}
   } finally {
     revalidatePath(`/problem/${problemId}`)
   }
