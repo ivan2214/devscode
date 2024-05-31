@@ -1,8 +1,8 @@
 import {type Tag} from "@prisma/client"
 import {Suspense} from "react"
 
+import {ScrollArea} from "@ui/scroll-area"
 import {cn} from "@/lib/utils"
-import {ScrollArea} from "@/components/ui/scroll-area"
 
 import {SideBarItem} from "./side-bar-item"
 

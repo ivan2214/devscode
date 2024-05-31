@@ -3,8 +3,8 @@ import {Loader2Icon, TrashIcon} from "lucide-react"
 import {usePathname, useRouter} from "next/navigation"
 import {useState} from "react"
 
-import {Badge} from "@/components/ui/badge"
-import {Button} from "@/components/ui/button"
+import {Badge} from "@ui/badge"
+import {Button} from "@ui/button"
 import {type QueryProps} from "@/data/problem/get-filtered-problems"
 
 interface QueryComponentProps {

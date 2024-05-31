@@ -1,6 +1,6 @@
 import {create} from "zustand"
 
-import {type CreateProblemFormValues} from "@/components/problem/problem-form"
+import {type CreateProblemFormValues} from "@components/problem/problem-form"
 
 interface CreateProblemModalStore {
   isOpen: boolean

@@ -8,10 +8,10 @@ import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {toast} from "sonner"
 
-import {Button} from "@/components/ui/button"
+import {Button} from "@ui/button"
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@ui/form"
+import {Input} from "@ui/input"
 import {CreateCommentSchema} from "@/schemas"
-import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form"
-import {Input} from "@/components/ui/input"
 import {createComment} from "@/actions/comment/create-comment"
 
 interface CommentFormProps {

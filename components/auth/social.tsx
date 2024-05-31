@@ -2,6 +2,7 @@
 
 import {signIn} from "next-auth/react"
 import {ChromeIcon, GithubIcon} from "lucide-react"
+
 import {Button} from "@ui/button"
 
 export const Social = () => {

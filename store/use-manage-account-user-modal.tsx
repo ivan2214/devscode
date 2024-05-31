@@ -1,7 +1,7 @@
 import {create} from "zustand"
 import {type Account} from "@prisma/client"
 
-import {type ManageAccountUserFormValues} from "@/components/account/manage-account-user-form"
+import {type ManageAccountUserFormValues} from "@components/account/manage-account-user-form"
 
 interface ManageAccountUserModalStore {
   isOpen: boolean

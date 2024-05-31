@@ -7,6 +7,7 @@ import {useForm} from "react-hook-form"
 import {useSearchParams} from "next/navigation"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {EyeIcon, EyeOffIcon} from "lucide-react"
+
 import {LoginSchema} from "@schemas/index"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@ui/form"
 import CardWrapper from "@components/auth/card-wrapper"
@@ -14,7 +15,6 @@ import {Input} from "@ui/input"
 import {Button} from "@ui/button"
 import {FormError} from "@components/form-error"
 import {FormSucces} from "@components/form-succes"
-
 import {login} from "@/actions/user/login"
 
 export type LoginFormValues = z.infer<typeof LoginSchema>

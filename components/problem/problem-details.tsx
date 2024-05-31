@@ -1,11 +1,9 @@
-import React, {useState, useRef} from "react"
+import React, {useRef, useState} from "react"
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
-import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
-import hljs from "highlight.js"
+import {atomDark} from "react-syntax-highlighter/dist/esm/styles/prism"
+import Markdown from "react-markdown"
 import {type ControllerRenderProps} from "react-hook-form"
-import {toast} from "sonner"
-
-import {cn} from "@/lib/utils"
+import {CodeSquare} from "lucide-react"
 
 import {Button} from "../ui/button"
 import {Textarea} from "../ui/textarea"
@@ -14,6 +12,25 @@ import {type CreateProblemFormValues} from "./problem-form"
 
 interface ProblemDetailsProps {
   field: ControllerRenderProps<CreateProblemFormValues, "code">
+}
+
+interface CodeProps {
+  className?: string
+  children?: React.ReactNode
+}
+
+const Code: React.FC<CodeProps> = ({className, children}) => {
+  const match = className ? /language-(\w+)/.exec(className) : null
+
+  return match ? (
+    <SyntaxHighlighter language={match[1]} style={atomDark}>
+      {String(children).replace(/\n$/, "")}
+    </SyntaxHighlighter>
+  ) : (
+    <pre>
+      <code>{children}</code>
+    </pre>
+  )
 }
 
 const ProblemDetails: React.FC<ProblemDetailsProps> = ({field}) => {
@@ -27,25 +44,23 @@ const ProblemDetails: React.FC<ProblemDetailsProps> = ({field}) => {
     setContent(value)
   }
 
-  const getPreviewContent = (): string => {
-    return content
-  }
-
   const handleModeChange = (newMode: "markdown" | "preview") => {
     setMode(newMode)
   }
-  const detectLanguage = (content: string): string => {
-    const language = hljs.highlightAuto(content).language
 
-    return language || "bash"
+  const addBlockCode = () => {
+    setContent(
+      (prevContent) => `\`\`\`lenguaje
+      ${prevContent}\n\`\`\``,
+    )
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative flex w-full resize-none flex-col overflow-auto rounded-sm bg-gray-800 p-0">
-        <div className="sticky left-0 top-0 z-10 flex items-center bg-gray-800 p-4 shadow-md">
-          <div className="ml-6 flex items-center text-gray-500">
-            <div className="btn-group flex gap-2">
+      <div className="relative flex w-full resize-none flex-col overflow-auto rounded-sm p-0">
+        <div className="sticky left-0 top-0 z-10 flex items-center  p-4 shadow-md">
+          <div className="ml-6 flex items-center ">
+            <div className="flex gap-2">
               <Button
                 title="Markdown mode"
                 type="button"
@@ -63,6 +78,15 @@ const ProblemDetails: React.FC<ProblemDetailsProps> = ({field}) => {
               >
                 Preview
               </Button>
+              <Button
+                size="icon"
+                title="Add BlockCode"
+                type="button"
+                variant="ghost"
+                onClick={addBlockCode}
+              >
+                <CodeSquare className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </div>
@@ -70,31 +94,30 @@ const ProblemDetails: React.FC<ProblemDetailsProps> = ({field}) => {
           <Textarea
             {...field}
             ref={textareaRef}
-            className="prose h-fit max-h-64 min-h-52 w-full flex-grow resize-none overflow-y-auto bg-gray-900 p-4 text-gray-300"
+            className="prose h-fit max-h-64 min-h-52 w-full flex-grow resize-none overflow-y-auto p-4 focus-visible:ring-0"
             value={content}
             onChange={(e) => {
               if (e.target.value.length < 10000) {
                 field.onChange(e)
                 handleContentChange(e)
               }
-              if (e.target.value.length > 10000) {
-                console.log(e.target.value.length)
-
-                toast("Error", {
-                  description: "You can only enter a maximum of 10000 characters",
-                })
-              }
             }}
           />
         )}
-        {mode === "preview" && content && content.length > 0 ? (
-          <div className="prose relative h-fit max-h-64 w-full flex-grow resize-none overflow-y-auto">
-            <div className="absolute right-0 top-0 rounded-t-sm bg-gray-800 px-2 py-1 text-xs text-gray-500">
-              Detected Language: {detectLanguage(content)}
-            </div>
-            <SyntaxHighlighter language={detectLanguage(content)} style={vscDarkPlus}>
-              {getPreviewContent()}
-            </SyntaxHighlighter>
+        {mode === "preview" && content.length ? (
+          <div className="prose h-fit max-h-64 min-h-52 w-full flex-grow resize-none overflow-y-auto p-4">
+            <Markdown
+              components={{
+                // eslint-disable-next-line react/no-unstable-nested-components
+                code: ({children, className, ...props}) => (
+                  <Code className={className} {...props}>
+                    {children}
+                  </Code>
+                ),
+              }}
+            >
+              {content}
+            </Markdown>
           </div>
         ) : null}
       </div>

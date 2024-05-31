@@ -4,7 +4,7 @@ import {Trash2Icon} from "lucide-react"
 import {toast} from "sonner"
 import {useTransition} from "react"
 
-import {Button} from "@/components/ui/button"
+import {Button} from "@ui/button"
 import {deleteComment} from "@/actions/comment/delete-comment"
 
 interface ButtonCommentDeleteProps {

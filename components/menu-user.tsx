@@ -3,10 +3,10 @@ import Link from "next/link"
 import {signOut} from "next-auth/react"
 import {type Account, type User} from "@prisma/client"
 
+import {Button} from "@ui/button"
+import {Popover, PopoverContent, PopoverTrigger} from "@ui/popover"
 import Icon, {type IconProps} from "@ui/icon"
 import {Separator} from "@ui/separator"
-import {Button} from "@/components/ui/button"
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 
 export interface Route {
   name: string

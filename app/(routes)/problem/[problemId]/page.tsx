@@ -1,13 +1,14 @@
-import Link from "next/link"
 import {ClockIcon, FlagIcon, MailIcon, ShareIcon, TagIcon, UserIcon} from "lucide-react"
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
 import hljs from "highlight.js"
 
+import {Button} from "@ui/button"
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@ui/tooltip"
+import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 import {auth} from "auth"
-import {Button} from "@/components/ui/button"
 import {db} from "@/lib/db"
-import {type CreateProblemFormValues} from "@/components/problem/problem-form"
+import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 
 import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
@@ -65,7 +66,16 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
           tag: true,
         },
       },
-      user: true,
+      user: {
+        include: {
+          _count: {
+            select: {
+              problemsResolved: true,
+            },
+          },
+        },
+      },
+      ProblemsResolved: true,
     },
   })
 
@@ -127,9 +137,43 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               <div className="flex items-center gap-2">
                 <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Creado por:</span>
-                <Link className="text-sm text-blue-600 hover:underline dark:text-blue-400" href="#">
-                  {creatorName(problem.user)}
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <span className="text-sm text-blue-500 hover:underline">
+                        {creatorName(problem.user)}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="border shadow-xl">
+                      <article className="flex items-start gap-2">
+                        <Avatar>
+                          <AvatarImage src={problem.user?.image || ""} />
+                          <AvatarFallback>{creatorName(problem.user)}</AvatarFallback>
+                        </Avatar>
+                        <section className="flex flex-col items-start gap-y-2">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-sm font-bold">Username:</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              {problem.user?.username}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-sm font-bold">Email:</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              {problem.user?.email}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-sm font-bold">Problemas resueltos:</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              {problem.user?._count.problemsResolved.toString()}
+                            </span>
+                          </div>
+                        </section>
+                      </article>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div className="space-y-2">

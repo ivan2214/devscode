@@ -6,7 +6,7 @@ import {Button} from "@ui/button"
 const AuthButtons = () => {
   return (
     <section className="flex items-center gap-2">
-      <Button role="link" type="button">
+      <Button role="link" type="button" variant="outline">
         <Link href="/auth/login">Iniciar Sesion</Link>
       </Button>
       <Button role="link" type="button" variant="outline">

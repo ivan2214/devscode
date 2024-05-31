@@ -2,8 +2,8 @@
 
 import {PencilIcon} from "lucide-react"
 
-import {Button} from "@/components/ui/button"
-import {type CreateProblemFormValues} from "@/components/problem/problem-form"
+import {Button} from "@ui/button"
+import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {useCreateProblemModal} from "@/store/use-create-problem-modal"
 
 interface ButtonOpenModalEditProps {

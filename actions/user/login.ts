@@ -2,7 +2,7 @@
 
 import {AuthError} from "next-auth"
 
-import {type LoginFormValues} from "@/components/auth/login-form"
+import {type LoginFormValues} from "@components/auth/login-form"
 import {LoginSchema} from "@/schemas"
 import {signIn} from "auth"
 import {getUserByEmail} from "@/data/user/user"

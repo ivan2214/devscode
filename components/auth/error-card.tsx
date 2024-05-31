@@ -1,4 +1,5 @@
 import {TriangleAlertIcon} from "lucide-react"
+
 import CardWrapper from "@components/auth/card-wrapper"
 
 export const ErrorCard = () => {

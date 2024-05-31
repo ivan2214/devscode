@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from "react"
 
-import {ManageAccountUserModal} from "@/components/modals/manage-account-user-modal"
+import {ManageAccountUserModal} from "@components/modals/manage-account-user-modal"
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)

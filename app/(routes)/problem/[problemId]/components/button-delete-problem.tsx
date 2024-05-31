@@ -4,7 +4,7 @@ import {LoaderIcon, TrashIcon} from "lucide-react"
 import {useTransition} from "react"
 import {toast} from "sonner"
 
-import {Button} from "@/components/ui/button"
+import {Button} from "@ui/button"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@ui/alert-dialog"
 import {deleteProblem} from "@/actions/problem/delete-problem"
 
 interface ButtonDeleteProblemProps {

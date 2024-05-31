@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 
 import {db} from "@/lib/db"
 import {RegisterSchema} from "@/schemas"
-import {type RegisterFormValues} from "@/components/auth/register-form"
+import {type RegisterFormValues} from "@components/auth/register-form"
 import {getUserByEmail} from "@/data/user/user"
 
 export const register = async (values: RegisterFormValues) => {

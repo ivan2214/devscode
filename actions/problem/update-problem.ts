@@ -3,7 +3,7 @@ import {revalidatePath} from "next/cache"
 
 import {db} from "@/lib/db"
 import {UpdateProblemSchema} from "@/schemas"
-import {type UpdateProblemFormValues} from "@/components/problem/problem-form"
+import {type UpdateProblemFormValues} from "@components/problem/problem-form"
 
 export const updateProblem = async (values: UpdateProblemFormValues, problemId: string) => {
   // Validar los campos de entrada

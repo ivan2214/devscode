@@ -9,12 +9,7 @@ import {ArrowRightIcon, PlusIcon} from "lucide-react"
 import Icon from "@ui/icon"
 import {useManageAccountUserModal} from "@/store/use-manage-account-user-modal"
 import {ManageAccountUserSchema} from "@/schemas"
-import {
-  AccordionTrigger,
-  AccordionContent,
-  AccordionItem,
-  Accordion,
-} from "@/components/ui/accordion"
+import {AccordionTrigger, AccordionContent, AccordionItem, Accordion} from "@ui/accordion"
 
 import {Button} from "../ui/button"
 
@@ -110,14 +105,7 @@ export const ManageAccountUserForm = () => {
                     <div className="flex flex-col items-start gap-y-3">
                       <h4>Remove</h4>
                       <p>Remove this connected account from your account</p>
-                      <Button
-                        className="p-0 text-destructive"
-                        type="button"
-                        variant="link"
-                        onClick={() => {
-                          console.log("remover cuenta")
-                        }}
-                      >
+                      <Button className="p-0 text-destructive" type="button" variant="link">
                         Remove connected account
                       </Button>
                     </div>
@@ -131,9 +119,6 @@ export const ManageAccountUserForm = () => {
         <Button
           className="flex w-full items-center justify-between transition hover:bg-blue-500/70"
           variant="outline"
-          onClick={() => {
-            console.log("conectar cuenta")
-          }}
         >
           <div className="flex items-center gap-x-3">
             <PlusIcon className="h-4 w-4" /> Connect account
@@ -149,14 +134,7 @@ export const ManageAccountUserForm = () => {
               <h5 className="text-lg">Delete account</h5>
               <p className="text-sm font-light">Delete your account and all its associated data</p>
             </div>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                console.log("Eliminar cuenta")
-              }}
-            >
-              Eliminar cuenta
-            </Button>
+            <Button variant="destructive">Eliminar cuenta</Button>
           </div>
         </div>
       </section>

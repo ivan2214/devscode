@@ -1,11 +1,11 @@
 import {Suspense} from "react"
 
-import {Separator} from "@/components/ui/separator"
-import {SearchBar} from "@/components/search-bar"
-import SearchBarFallback from "@/components/fallbacks/search-bar-fallback"
+import {Separator} from "@ui/separator"
+import {SearchBar} from "@components/search-bar"
+import SearchBarFallback from "@components/fallbacks/search-bar-fallback"
 import {type QueryProps, getFilteredProblems} from "@/data/problem/get-filtered-problems"
 import {QueryComponent} from "@/app/(routes)/problems/components/query-component"
-import {CardProblem} from "@/components/card-problem"
+import {CardProblem} from "@components/card-problem"
 
 export default async function ProblemsPage({searchParams}: {searchParams?: QueryProps}) {
   const {problems} = await getFilteredProblems(searchParams)

@@ -19,8 +19,8 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "@/components/ui/menubar"
-import AuthButtons from "@/components/auth-options"
+} from "@ui/menubar"
+import AuthButtons from "@components/auth-options"
 import {Button} from "@ui/button"
 
 const filterOptions = [
@@ -205,8 +205,8 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
         </Suspense>
         {!user && <AuthButtons />}
         {user ? <MenuUser user={user} /> : null}
-        <Button role="link" type="button" variant="outline">
-          <Link href="/ask">Publicar problem</Link>
+        <Button role="link" type="button">
+          <Link href="/ask/create">Publicar problem</Link>
         </Button>
         <ModeToggle />
       </section>

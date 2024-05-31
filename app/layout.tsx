@@ -2,16 +2,15 @@ import "./globals.css"
 import {Inter as FontSans} from "next/font/google"
 import {Suspense, type ReactNode} from "react"
 
+import {Toaster} from "@ui/sonner"
 import {cn} from "@/lib/utils"
 import {db} from "@/lib/db"
 import {auth} from "@/auth"
 import {getUserById} from "@/data/user/user"
 import {ThemeProvider} from "@/providers/theme-provider"
 import {ModalProvider} from "@/providers/modal-provider"
-import {Toaster} from "@/components/ui/sonner"
-import AuthProvider from "@/providers/session-provider"
-import SearchBarFallback from "@/components/fallbacks/search-bar-fallback"
-import {Menu} from "@/components/menu"
+import SearchBarFallback from "@components/fallbacks/search-bar-fallback"
+import {Menu} from "@components/menu"
 
 const fontSans = FontSans({
   subsets: ["latin"],

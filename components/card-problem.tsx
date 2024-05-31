@@ -1,17 +1,10 @@
 import Link from "next/link"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {Separator} from "@/components/ui/separator"
-import {Badge} from "@/components/ui/badge"
-import {Button} from "@/components/ui/button"
-import Icon from "@/components/ui/icon"
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@ui/card"
+import {Separator} from "@ui/separator"
+import {Badge} from "@ui/badge"
+import {Button} from "@ui/button"
+import Icon from "@ui/icon"
 import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 

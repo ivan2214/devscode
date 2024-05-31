@@ -1,4 +1,4 @@
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 import {type ReplyExtends, type CommentExtends} from "@/data/problem/get-filtered-problems"
 
 import {ButtonCommentDelete} from "./button-comment-delete"

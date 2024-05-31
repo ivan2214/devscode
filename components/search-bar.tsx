@@ -3,7 +3,7 @@
 import {SearchIcon} from "lucide-react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
 
-import {Input} from "@/components/ui/input"
+import {Input} from "@ui/input"
 import {createUrl} from "@/lib/utils"
 
 export const SearchBar = () => {

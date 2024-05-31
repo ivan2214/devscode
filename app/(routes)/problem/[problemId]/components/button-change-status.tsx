@@ -8,9 +8,9 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import {Status} from "@prisma/client"
 import {toast} from "sonner"
 
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@ui/form"
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@ui/select"
 import {ChangeStatusSchema} from "@/schemas"
-import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form"
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
 import {changeStatus} from "@/actions/problem/change-status"
 
 export type ChangeStatusFormValues = z.infer<typeof ChangeStatusSchema>
