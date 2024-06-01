@@ -7,6 +7,7 @@ import {Button} from "@ui/button"
 import Icon from "@ui/icon"
 import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
+import {cn} from "@/lib/utils"
 
 import {TagIcon, TagIcons} from "./ui/tag-icon"
 
@@ -23,7 +24,7 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
             <Icon className="h-4 w-4" name="code" />
             <CardTitle>{problem.title}</CardTitle>
           </div>
-          <div className="flex items-center gap-x-2">
+          <section className="flex w-full flex-wrap items-center gap-2">
             {problem.tags.map((tags) => {
               const tag = tags.tag
               const isValidTagIcon = tag.name in TagIcons
@@ -31,7 +32,7 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
               return (
                 <Badge
                   key={tag.name}
-                  className="flex w-full items-center gap-x-2 uppercase"
+                  className="flex items-center gap-x-2 uppercase"
                   variant="outline"
                 >
                   {isValidTagIcon ? (
@@ -43,8 +44,23 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
                 </Badge>
               )
             })}
-          </div>
-          <Badge>Vistas: {problem.views}</Badge>
+          </section>
+          <section className="flex w-full flex-wrap items-center gap-2">
+            <Badge>Vistas: {problem.views}</Badge>
+            <Badge>Likes: {problem.likes}</Badge>
+            <Badge>Comentarios: {problem.comments.length}</Badge>
+            <Badge
+              className={cn(
+                problem.status === "solved"
+                  ? "bg-green-500"
+                  : problem.status === "open"
+                    ? "bg-yellow-500"
+                    : "bg-red-500",
+              )}
+            >
+              {problem.status}
+            </Badge>
+          </section>
         </CardHeader>
         <CardContent>
           <CardDescription className="truncate">{problem.description}</CardDescription>

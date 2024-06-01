@@ -1,24 +1,28 @@
 "use client"
 
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
-import {type Tag} from "@prisma/client"
+import {type Status, type Tag} from "@prisma/client"
 import {useEffect, useState} from "react"
 
 import {createUrl} from "@/lib/utils"
 import {useMediaQuery} from "@/hooks/use-media-query"
 import {Button} from "@/components/ui/button"
 import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer"
-import {TagIcon} from "@ui/tag-icon"
-import {type SortByOptions} from "@/data/problem/get-filtered-problems"
+import {TagIcon, TagIcons} from "@ui/tag-icon"
+import {type QueryProps, type SortByOptions} from "@/data/problem/get-filtered-problems"
 
 import Icon from "./ui/icon"
 import {ListCommand} from "./list-command"
 
 interface SideFilterItemsProps {
   tags: Omit<Tag, "createdAt" | "updatedAt">[]
+  searchParams?: QueryProps
 }
 
-export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
+export const SideFilterItems: React.FC<SideFilterItemsProps> = ({
+  tags,
+  searchParams: propsSearchParams,
+}) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentParamsTags = new URLSearchParams(searchParams.toString()).get("tags")
@@ -32,6 +36,8 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
   const [selectedSort, setSelectedSort] = useState<string | null>(
     currentParamsSortBy && currentParamsSortBy,
   )
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
+  const {keyword} = propsSearchParams || {}
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -56,8 +62,12 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
         newParams.delete("tags")
         newParams.delete("sortBy")
         newParams.delete("sortByType")
+        newParams.delete("status")
+        newParams.delete("keyword")
+
         setSelectedTag("all")
         setSelectedSort(null)
+        setSelectedStatus(null)
 
         router.push(createUrl(pathname, newParams))
       }
@@ -96,7 +106,15 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
     router.push(createUrl(pathname, newParams))
   }
 
-  const removeParam = (param: "tags" | "sortBy") => {
+  const handleStatusSelection = (status: Status) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+
+    newParams.set("status", status)
+
+    router.push(createUrl(pathname, newParams))
+  }
+
+  const removeParam = (param: keyof QueryProps) => {
     const newParams = new URLSearchParams(searchParams.toString())
 
     if (param === "tags") {
@@ -111,8 +129,12 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
       setSelectedSort(null)
     }
 
+    newParams.delete(param)
+
     router.push(createUrl(pathname, newParams))
   }
+
+  const isValidIconTag = selectedTag && selectedTag in TagIcons
 
   if (isDesktop) {
     return (
@@ -129,33 +151,61 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
           {`Filter (${tags.length})`}
         </Button>
         {selectedTag && selectedTag !== "all" ? (
-          <Button className="flex items-center gap-x-2" variant="outline">
-            {selectedTag !== "all" ? (
+          <Button
+            className="flex items-center gap-x-2"
+            type="button"
+            variant="outline"
+            onClick={() => removeParam("tags")}
+          >
+            {selectedTag !== "all" && isValidIconTag ? (
               <TagIcon className="h-5 w-5" name={selectedTag} />
             ) : (
               <Icon className="h-5 w-5" name="tag" />
             )}
             {selectedTag}
 
-            <Icon
-              className="h-3 w-3 text-destructive "
-              name="trash"
-              onClick={() => removeParam("tags")}
-            />
+            <Icon className="h-3 w-3 text-destructive " name="trash" />
           </Button>
         ) : null}
 
         {selectedSort ? (
-          <Button className="flex items-center gap-x-2" variant="outline">
+          <Button
+            className="flex items-center gap-x-2"
+            type="button"
+            variant="outline"
+            onClick={() => removeParam("sortBy")}
+          >
             <Icon className="h-5 w-5" name="arrow-up-down" />
             {selectedSort}
-            <Icon
-              className="h-3 w-3 text-destructive "
-              name="trash"
-              onClick={() => removeParam("sortBy")}
-            />
+            <Icon className="h-3 w-3 text-destructive " name="trash" />
           </Button>
         ) : null}
+
+        {selectedStatus ? (
+          <Button
+            className="flex items-center gap-x-2"
+            type="button"
+            variant="outline"
+            onClick={() => removeParam("status")}
+          >
+            {selectedStatus}
+            <Icon className="h-3 w-3 text-destructive " name="trash" />
+          </Button>
+        ) : null}
+
+        {keyword ? (
+          <Button
+            className="flex items-center gap-x-2"
+            type="button"
+            variant="outline"
+            onClick={() => removeParam("keyword")}
+          >
+            <Icon className="h-5 w-5" name="search" />
+            {keyword}
+            <Icon className="h-3 w-3 text-destructive " name="trash" />
+          </Button>
+        ) : null}
+
         <p className="text-sm text-muted-foreground">
           Presiona{" "}
           <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
@@ -165,11 +215,13 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
         </p>
         <ListCommand
           handleSortSelection={handleSortSelection}
+          handleStatusSelection={handleStatusSelection}
           handleTagSelection={handleTagSelection}
           isDesktop={isDesktop}
           open={open}
           setOpen={setOpen}
           setSelectedSort={setSelectedSort}
+          setSelectedStatus={setSelectedStatus}
           setSelectedTag={setSelectedTag}
           tags={tags}
         />
@@ -188,10 +240,12 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({tags}) => {
         <div className="mt-4 border-t">
           <ListCommand
             handleSortSelection={handleSortSelection}
+            handleStatusSelection={handleStatusSelection}
             handleTagSelection={handleTagSelection}
             isDesktop={isDesktop}
             setOpen={setOpen}
             setSelectedSort={setSelectedSort}
+            setSelectedStatus={setSelectedStatus}
             setSelectedTag={setSelectedTag}
             tags={tags}
           />

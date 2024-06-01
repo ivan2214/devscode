@@ -26,6 +26,8 @@ export interface QueryProps {
   sortBy?: SortByOptions
   sortByType?: "desc" | "asc"
   status?: Status
+  take?: string
+  skip?: string
 }
 
 export interface UserExtends extends User {
@@ -51,7 +53,6 @@ export interface TagsOnProblemExtends extends TagsOnProblem {
 export interface ProblemExtends extends Problem {
   user?: User | null
   comments: CommentExtends[]
-
   tags: TagsOnProblemExtends[]
 }
 
@@ -59,7 +60,7 @@ export const getFilteredProblems = async (
   query?: QueryProps,
 ): Promise<{problems: ProblemExtends[] | []}> => {
   try {
-    const {tags, keyword, sortBy, sortByType, status} = query ?? {}
+    const {tags, keyword, sortBy, sortByType, status, take, skip} = query ?? {}
 
     const where: Prisma.ProblemFindManyArgs["where"] = {}
 
@@ -156,6 +157,8 @@ export const getFilteredProblems = async (
         },
       },
       orderBy,
+      take: take ? Number(take) : undefined,
+      skip: skip ? Number(skip) : undefined,
     })
 
     return {problems}

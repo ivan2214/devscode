@@ -49,6 +49,7 @@ import {
   DeviconNuxtjs,
   StreamlineProgrammingBrowserCode1CodeBrowserLineShellProgrammingCommandTerminal,
   StreamlineProgrammingBrowserCode2CodeBrowserTagsAngleProgrammingBracket,
+  HugeiconsBlockchain01,
 } from "@ui/icons-svg"
 
 export const TagIcons: Record<string, (props: SVGProps<SVGSVGElement>) => JSX.Element> = {
@@ -80,7 +81,6 @@ export const TagIcons: Record<string, (props: SVGProps<SVGSVGElement>) => JSX.El
   groovy: DeviconGroovy,
   haskell: DeviconHaskell,
   html: DeviconHtml5,
-
   php: DeviconPhp,
   javascript: DeviconJavascript,
   typescript: DeviconTypescript,
@@ -102,6 +102,7 @@ export const TagIcons: Record<string, (props: SVGProps<SVGSVGElement>) => JSX.El
   github: CodiconGithubInverted,
   graphql: VscodeIconsFileTypeGraphql,
   apollo: SimpleIconsApollographql,
+  blockchain: HugeiconsBlockchain01,
 }
 
 export const TagIcon = ({

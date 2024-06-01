@@ -36,7 +36,7 @@ if (!problem) {
 
 export const createManyProblems = async (tags: Tag[], users: User[]): Promise<string[]> => {
   const problemsIds: string[] = []
-  const randomProblems = faker.number.int({min: 10, max: 35})
+  const randomProblems = faker.number.int({min: 20, max: 50})
 
   for (let i = 0; i < randomProblems; i++) {
     const userId = users[Math.floor(Math.random() * users.length)].id

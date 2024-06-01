@@ -23,6 +23,7 @@ import {
 import AuthButtons from "@components/auth-options"
 
 import {ButtonCreateProblem} from "./button-create-problem"
+import {sortOptions} from "./list-command"
 
 const filterOptions = [
   {
@@ -49,21 +50,6 @@ const filterOptions = [
   {
     name: "Mas vendidos",
     value: "most_sold",
-  },
-]
-
-const sortOptions = [
-  {
-    name: "Mas recientes",
-    value: "most_recent",
-  },
-  {
-    name: "Mas antiguos",
-    value: "most_ancient",
-  },
-  {
-    name: "De mas popular a menos",
-    value: "most_popular",
   },
 ]
 
@@ -171,7 +157,7 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
                       handleSortClick(sort.value)
                     }}
                   >
-                    {sort.name}
+                    {sort.label}
                   </MenubarItem>
                 ))}
               </MenubarSubContent>

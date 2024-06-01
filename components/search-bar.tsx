@@ -23,10 +23,8 @@ export const SearchBar = () => {
     } else {
       newParams.delete("keyword")
     }
-    const includesOfferPage = pathname?.includes("problems")
-    const pathNameDefined = !includesOfferPage ? `/problems${pathname}` : pathname
 
-    router.push(createUrl(pathNameDefined, newParams))
+    router.push(createUrl(pathname, newParams))
     router.refresh()
   }
 

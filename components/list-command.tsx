@@ -1,4 +1,4 @@
-import {type Tag} from "@prisma/client"
+import {type Status, type Tag} from "@prisma/client"
 
 import {
   Command,
@@ -21,7 +21,7 @@ interface SortOption {
   type?: "asc" | "desc"
 }
 
-const sortOptions: SortOption[] = [
+export const sortOptions: SortOption[] = [
   {
     value: "date",
     label: "Fecha desc",
@@ -94,6 +94,30 @@ const sortOptions: SortOption[] = [
   },
 ]
 
+interface StatusOption {
+  value: Status
+  label: string
+}
+
+export const statusOptions: StatusOption[] = [
+  {
+    value: "closed",
+    label: "Cerrado",
+  },
+  {
+    value: "open",
+    label: "Abierto",
+  },
+  {
+    value: "solved",
+    label: "Solucionado",
+  },
+  {
+    value: "unsolved",
+    label: "Sin solución",
+  },
+]
+
 export function ListCommand({
   setOpen,
   setSelectedTag,
@@ -103,15 +127,19 @@ export function ListCommand({
   handleSortSelection,
   open,
   setSelectedSort,
+  setSelectedStatus,
+  handleStatusSelection,
 }: {
+  tags: Omit<Tag, "createdAt" | "updatedAt">[]
+  isDesktop?: boolean
+  open?: boolean
   setOpen: (open: boolean) => void
   setSelectedTag: (tag: string | null) => void
-  tags: Omit<Tag, "createdAt" | "updatedAt">[]
   handleTagSelection: (tagName: string) => void
   handleSortSelection: (sortBy: SortByOptions, type?: "asc" | "desc") => void
   setSelectedSort: (sort: string | null) => void
-  isDesktop?: boolean
-  open?: boolean
+  setSelectedStatus: (status: string | null) => void
+  handleStatusSelection: (status: Status) => void
 }) {
   if (isDesktop) {
     return (
@@ -169,8 +197,26 @@ export function ListCommand({
                 key={option.value}
                 value={option.value}
                 onSelect={() => {
-                  setSelectedSort(option.value)
+                  setSelectedSort(`${option.value}-${option.type}`)
                   handleSortSelection(option.value, option.type)
+                  setOpen(false)
+                }}
+              >
+                <Badge className="flex w-full items-center gap-x-2" variant="outline">
+                  <Icon className="h-5 w-5" name="arrow-down-up" />
+                  {option.label}
+                </Badge>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Status">
+            {statusOptions.map((option) => (
+              <CommandItem
+                key={option.value}
+                value={option.value}
+                onSelect={() => {
+                  setSelectedStatus(option.label)
+                  handleStatusSelection(option.value)
                   setOpen(false)
                 }}
               >
@@ -239,7 +285,7 @@ export function ListCommand({
               key={option.value}
               value={option.value}
               onSelect={() => {
-                setSelectedSort(option.value)
+                setSelectedSort(`${option.value}-${option.type}`)
                 handleSortSelection(option.value, option.type)
                 setOpen(false)
               }}
