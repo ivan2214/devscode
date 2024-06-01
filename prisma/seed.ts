@@ -20,19 +20,23 @@ async function main() {
     return
   }
 
-  // limpia la base de datos
+  // Limpia la base de datos
   await prisma.$transaction([
     prisma.user.deleteMany({}),
     prisma.comment.deleteMany({}),
     prisma.problem.deleteMany({}),
   ])
-  const users = await createManyUsers()
-  const tags = await createManyTags()
-  const problemsIds = await createManyProblems(tags, users)
 
-  for (const problemId of problemsIds) {
-    await createManyComments(users, problemId)
-  }
+  // Crea nuevos datos dentro de otra transacción
+  await prisma.$transaction(async (_) => {
+    const users = await createManyUsers()
+    const tags = await createManyTags()
+    const problemsIds = await createManyProblems(tags, users)
+
+    for (const problemId of problemsIds) {
+      await createManyComments(users, problemId)
+    }
+  })
 }
 
 main()

@@ -22,24 +22,24 @@ export const Comment: React.FC<CommentProps> = ({comment, isAuthorComment, isAut
         isReply={false}
       />
 
-      <ScrollArea className="ml-10 h-72 rounded-md border border-gray-200 p-4">
-        {comment.reply?.length
-          ? comment.reply.map((reply) => {
-              const isAnonymousReply = reply?.anonymous
+      {comment.reply?.length ? (
+        <ScrollArea className="ml-10 h-40 max-h-fit rounded-md border border-gray-200 p-4">
+          {comment.reply.map((reply) => {
+            const isAnonymousReply = reply?.anonymous
 
-              return (
-                <CommentItem
-                  key={reply.id}
-                  isReply
-                  isAnonymous={isAnonymousReply}
-                  isAuthorComment={isAuthorComment}
-                  isAuthorProblem={isAuthorProblem}
-                  reply={reply}
-                />
-              )
-            })
-          : null}
-      </ScrollArea>
+            return (
+              <CommentItem
+                key={reply.id}
+                isReply
+                isAnonymous={isAnonymousReply}
+                isAuthorComment={isAuthorComment}
+                isAuthorProblem={isAuthorProblem}
+                reply={reply}
+              />
+            )
+          })}
+        </ScrollArea>
+      ) : null}
     </section>
   )
 }

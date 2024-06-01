@@ -11,21 +11,36 @@ import {
 
 import {db} from "@/lib/db"
 
+export type SortByOptions =
+  | "date"
+  | "likes"
+  | "dislikes"
+  | "title"
+  | "views"
+  | "comments"
+  | "ProblemsResolved"
+
 export interface QueryProps {
   tags?: string
   keyword?: string
-  sortBy?: "date" | "priority" | "votes"
-  sortOrder?: "asc" | "desc"
+  sortBy?: SortByOptions
+  sortByType?: "desc" | "asc"
   status?: Status
 }
 
+export interface UserExtends extends User {
+  _count: {
+    problemsResolved: number
+  }
+}
+
 export interface CommentExtends extends Comment {
-  author?: User | null
+  author?: UserExtends | null
   reply?: ReplyExtends[] | null
 }
 
 export interface ReplyExtends extends Reply {
-  userReply?: User | null
+  userReply?: UserExtends | null
 }
 
 export interface TagsOnProblemExtends extends TagsOnProblem {
@@ -44,7 +59,7 @@ export const getFilteredProblems = async (
   query?: QueryProps,
 ): Promise<{problems: ProblemExtends[] | []}> => {
   try {
-    const {tags, keyword, sortBy, sortOrder, status} = query ?? {}
+    const {tags, keyword, sortBy, sortByType, status} = query ?? {}
 
     const where: Prisma.ProblemFindManyArgs["where"] = {}
 
@@ -89,7 +104,7 @@ export const getFilteredProblems = async (
       }
     }
 
-    const orderBy = getOrderBy(sortBy, sortOrder) // Función para obtener el orden según el criterio y la dirección
+    const orderBy = getOrderBy(sortBy, sortByType) // Función para obtener el orden según el criterio y la dirección
 
     const problems = await db.problem.findMany({
       where: {
@@ -115,10 +130,26 @@ export const getFilteredProblems = async (
         },
         comments: {
           include: {
-            author: true,
+            author: {
+              include: {
+                _count: {
+                  select: {
+                    problemsResolved: true,
+                  },
+                },
+              },
+            },
             reply: {
               include: {
-                userReply: true,
+                userReply: {
+                  include: {
+                    _count: {
+                      select: {
+                        problemsResolved: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -133,17 +164,46 @@ export const getFilteredProblems = async (
   }
 }
 
-const getOrderBy = (sortBy?: "date" | "priority" | "votes", sortOrder?: "asc" | "desc") => {
-  const order = sortOrder ?? "desc" // Si no se especifica sortOrder, el valor por defecto es "desc"
-
+const getOrderBy = (
+  sortBy?: SortByOptions,
+  sortByType?: QueryProps["sortByType"],
+): Prisma.ProblemOrderByWithRelationInput => {
   switch (sortBy) {
     case "date":
-      return {createdAt: order} // Ordenar por fecha de creación en la dirección especificada
-    case "priority":
-      return {priority: order} // Ordenar por prioridad en la dirección especificada, y luego por fecha de creación
-    case "votes":
-      return {votes: {_count: order}} // Ordenar por cantidad de votos en la dirección especificada, y luego por fecha de creación
+      return {
+        createdAt: sortByType,
+      }
+    case "likes":
+      return {
+        likes: sortByType,
+      }
+    case "dislikes":
+      return {
+        dislikes: sortByType,
+      }
+    case "title":
+      return {
+        title: sortByType,
+      }
+    case "views":
+      return {
+        views: sortByType,
+      }
+    case "comments":
+      return {
+        comments: {
+          _count: sortByType,
+        },
+      }
+    case "ProblemsResolved":
+      return {
+        ProblemsResolved: {
+          _count: sortByType,
+        },
+      }
     default:
-      return {createdAt: order} // Si no se especifica un criterio de ordenamiento, ordenar por fecha de creación en la dirección especificada
+      return {
+        createdAt: "desc",
+      }
   }
 }

@@ -36,12 +36,15 @@ if (!problem) {
 
 export const createManyProblems = async (tags: Tag[], users: User[]): Promise<string[]> => {
   const problemsIds: string[] = []
-  const randomProblems = faker.number.int({min: 5, max: 25})
+  const randomProblems = faker.number.int({min: 10, max: 35})
 
   for (let i = 0; i < randomProblems; i++) {
     const userId = users[Math.floor(Math.random() * users.length)].id
     const status: Status = faker.helpers.arrayElement(["open", "closed", "solved", "unsolved"])
-    const userProblemResolved = users[Math.floor(Math.random() * users.length)]
+
+    const userProblemResolvedIds = faker.helpers
+      .shuffle(users)
+      .slice(0, faker.number.int({min: 1, max: 5}))
     const isResolved: boolean = faker.helpers.arrayElement([true, false])
     const randomTags = faker.helpers.shuffle(tags).slice(0, faker.number.int({min: 1, max: 3}))
 
@@ -68,12 +71,14 @@ export const createManyProblems = async (tags: Tag[], users: User[]): Promise<st
       },
     })
 
-    if (isResolved) {
-      await db.problemsResolved.create({
-        data: {
-          problemId: problem.id,
-          resolverId: userProblemResolved.id,
-        },
+    if (userProblemResolvedIds.length > 0 && isResolved) {
+      await db.problemsResolved.createMany({
+        data: userProblemResolvedIds.map((user) => {
+          return {
+            problemId: problem.id,
+            resolverId: user.id,
+          }
+        }),
       })
     }
 

@@ -3,7 +3,7 @@ import {Button} from "@ui/button"
 
 export const ActiveIa = ({}) => {
   return (
-    <Card>
+    <Card className="flex flex-col items-start gap-y-5">
       <CardHeader>
         <CardTitle>IA Asistente</CardTitle>
       </CardHeader>

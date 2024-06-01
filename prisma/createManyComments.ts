@@ -5,13 +5,13 @@ import {db} from "../lib/db"
 
 export const createManyComments = async (users: User[], problemId: string): Promise<void> => {
   // Generar un número aleatorio de comentarios
-  const randomComments = faker.number.int({min: 0, max: 20})
+  const randomComments = faker.number.int({min: 0, max: 6})
 
   for (let i = 0; i < randomComments; i++) {
     let comment
     const userId = users[Math.floor(Math.random() * users.length)].id
     const commentAnonymous = Math.random() < 0.3
-    const randomReply = faker.number.int({min: 0, max: 20})
+    const randomReply = faker.number.int({min: 0, max: 6})
 
     // Crear un comentario
     if (!commentAnonymous) {

@@ -10,6 +10,7 @@ import {auth} from "auth"
 import {db} from "@/lib/db"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
+import {Badge} from "@/components/ui/badge"
 
 import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
 import {ButtonChangeStatus} from "./components/button-change-status"
@@ -50,15 +51,28 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
     include: {
       comments: {
         include: {
-          author: true,
-          reply: {
+          author: {
             include: {
-              userReply: true,
+              _count: {
+                select: {
+                  problemsResolved: true,
+                },
+              },
             },
           },
-        },
-        orderBy: {
-          likes: "desc",
+          reply: {
+            include: {
+              userReply: {
+                include: {
+                  _count: {
+                    select: {
+                      problemsResolved: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
       tags: {
@@ -75,7 +89,19 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
           },
         },
       },
-      ProblemsResolved: true,
+      ProblemsResolved: {
+        include: {
+          resolver: {
+            include: {
+              _count: {
+                select: {
+                  problemsResolved: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   })
 
@@ -130,9 +156,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
                 <TagIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Categorías:</span>
                 {problem.tags.map((tags) => (
-                  <span key={tags.tag.id} className="text-sm text-gray-500 dark:text-gray-400">
-                    {tags.tag.name}
-                  </span>
+                  <Badge key={tags.tag.id}>{tags.tag.name}</Badge>
                 ))}
               </div>
 
@@ -177,6 +201,53 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
                   </Tooltip>
                 </TooltipProvider>
               </div>
+              {problem.ProblemsResolved.length ? (
+                <div className="flex items-center gap-2">
+                  <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium">Resuelto por:</span>
+                  {problem.ProblemsResolved.map((problemResolved) => (
+                    <TooltipProvider key={problemResolved.id}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span className="text-sm text-blue-500 hover:underline">
+                            {creatorName(problemResolved.resolver)}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent className="border shadow-xl">
+                          <article className="flex items-start gap-2">
+                            <Avatar>
+                              <AvatarImage src={problemResolved.resolver?.image || ""} />
+                              <AvatarFallback>
+                                {creatorName(problemResolved.resolver)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <section className="flex flex-col items-start gap-y-2">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-sm font-bold">Username:</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                  {problemResolved.resolver?.username}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-sm font-bold">Email:</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                  {problemResolved.resolver?.email}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-sm font-bold">Problemas resueltos:</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                  {problemResolved.resolver?._count?.problemsResolved?.toString()}
+                                </span>
+                              </div>
+                            </section>
+                          </article>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              ) : null}
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">

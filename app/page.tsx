@@ -4,16 +4,16 @@ import {Button} from "@ui/button"
 import {Separator} from "@ui/separator"
 import {CardProblem} from "@components/card-problem"
 import {SideFilter} from "@components/side-filter"
-import {getFilteredProblems} from "@/data/problem/get-filtered-problems"
+import {type QueryProps, getFilteredProblems} from "@/data/problem/get-filtered-problems"
 import {ActiveIa} from "@components/active-ia"
 
-export default async function Home() {
-  const {problems} = await getFilteredProblems()
+export default async function Home({searchParams}: {searchParams?: QueryProps}) {
+  const {problems} = await getFilteredProblems(searchParams)
 
   return (
     <main className="container px-4 sm:px-6 lg:px-8">
-      <section className="flex items-start justify-between py-8">
-        <div className="sticky  top-10 flex max-w-xs flex-col gap-y-5 space-y-4">
+      <section className="flex flex-col items-center py-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-y-5 space-y-4 lg:sticky lg:top-10 lg:max-w-xs">
           <SideFilter />
           <ActiveIa />
         </div>

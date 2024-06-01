@@ -1,7 +1,7 @@
 import {getTags} from "@/data/tag/get-tags"
 
 import {Card, CardContent, CardHeader, CardTitle} from "./ui/card"
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "./ui/select"
+import {SideFilterItems} from "./side-filter-items"
 
 export const SideFilter = async () => {
   const {tags} = await getTags()
@@ -12,25 +12,7 @@ export const SideFilter = async () => {
         <CardTitle>Etiquetas</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {tags?.length ? (
-            <div>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un lenguaje" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  {tags.map((tag) => (
-                    <SelectItem key={tag.id} value={tag.id}>
-                      {tag.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : null}
-        </div>
+        <div className="space-y-4">{tags?.length ? <SideFilterItems tags={tags} /> : null}</div>
       </CardContent>
     </Card>
   )
