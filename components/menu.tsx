@@ -1,13 +1,10 @@
 "use client"
 import Link from "next/link"
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
-import {Suspense} from "react"
 import {type Tag} from "@prisma/client"
 
 import MenuUser, {type ExtendsUser} from "@components/menu-user"
 import ModeToggle from "@components/mode-toggle"
-import SearchBarFallback from "@components/fallbacks/search-bar-fallback"
-import {SearchBar} from "@components/search-bar"
 import {cn, createUrl} from "@/lib/utils"
 import {
   Menubar,
@@ -114,12 +111,8 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
           Inicio
         </Link>
         <MenubarMenu>
-          <MenubarTrigger className="font-bold">Problemas</MenubarTrigger>
+          <MenubarTrigger className="font-bold">Filtros</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem>
-              <Link href="/problems">problemas</Link>
-            </MenubarItem>
-            <MenubarSeparator />
             <MenubarSub>
               <MenubarSubTrigger>Filters</MenubarSubTrigger>
               <MenubarSubContent className="w-[230px]">
@@ -185,11 +178,9 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
             </MenubarSub>
           </MenubarContent>
         </MenubarMenu>
+        <Link href="/problems">problemas</Link>
       </div>
       <section className="hidden items-center gap-2 md:flex">
-        <Suspense fallback={<SearchBarFallback />}>
-          <SearchBar />
-        </Suspense>
         {!user && <AuthButtons />}
         {user ? <MenuUser user={user} /> : null}
         <ButtonCreateProblem />
