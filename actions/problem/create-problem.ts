@@ -2,23 +2,24 @@
 
 import {type Tag} from "@prisma/client"
 
-import {auth} from "auth"
 import {CreateProblemSchema} from "@/schemas"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {db} from "@/lib/db"
 
 export const createProblem = async (values: CreateProblemFormValues) => {
-  const session = await auth()
-  const userId = session?.user?.id
   const validatedFields = CreateProblemSchema.safeParse(values)
 
   if (!validatedFields.success) {
     return {error: "Invalid fields!"}
   }
 
-  const {description, title, tagNames, code} = validatedFields.data
+  const {description, title, tagNames, code, userId} = validatedFields.data
 
-  if (!description || !title) {
+  if (!userId) {
+    return {error: "Please sign in!"}
+  }
+
+  if (!description || !title || !userId) {
     return {error: "Invalid fields!"}
   }
 

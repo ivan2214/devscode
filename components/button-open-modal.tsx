@@ -1,10 +1,10 @@
 "use client"
-import {useCreateProblemModal} from "@/store/use-create-problem-modal"
+import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
 
 import {Button} from "./ui/button"
 
 export const ButtonOpenModal = () => {
-  const {open, clearData} = useCreateProblemModal()
+  const {open, clearData} = useUpdateProblemModal()
 
   return (
     <Button

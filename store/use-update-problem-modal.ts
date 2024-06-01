@@ -1,20 +1,20 @@
 import {create} from "zustand"
 
-import {type CreateProblemFormValues} from "@components/problem/problem-form"
+import {type UpdateProblemFormValues} from "@components/problem/problem-form"
 
-interface CreateProblemModalStore {
+interface UpdateProblemModalStore {
   isOpen: boolean
   open: () => void
   close: () => void
-  openEditModal: (problemId: string, data: CreateProblemFormValues) => void
+  openEditModal: (problemId: string, data: UpdateProblemFormValues) => void
   clearData: () => void
   data?: {
     problemId: string
-    values: CreateProblemFormValues
+    values: UpdateProblemFormValues
   }
 }
 
-export const useCreateProblemModal = create<CreateProblemModalStore>((set) => ({
+export const useUpdateProblemModal = create<UpdateProblemModalStore>((set) => ({
   isOpen: false,
 
   open: () => set({isOpen: true}),
@@ -25,6 +25,7 @@ export const useCreateProblemModal = create<CreateProblemModalStore>((set) => ({
       data: {
         problemId: "",
         values: {
+          userId: "",
           title: "",
           description: "",
           tagNames: [],

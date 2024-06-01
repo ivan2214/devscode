@@ -8,7 +8,7 @@ import {type z} from "zod"
 import {useFieldArray, useForm} from "react-hook-form"
 import {Loader, PlusIcon} from "lucide-react"
 import {TrashIcon} from "@radix-ui/react-icons"
-import {type Tag} from "@prisma/client"
+import {type User} from "@prisma/client"
 
 import {Button} from "@ui/button"
 import {
@@ -21,10 +21,10 @@ import {
   FormMessage,
 } from "@ui/form"
 import {CreateProblemSchema, type UpdateProblemSchema} from "@/schemas"
-import {useCreateProblemModal} from "@/store/use-create-problem-modal"
 import {createProblem} from "@/actions/problem/create-problem"
 import {updateProblem} from "@/actions/problem/update-problem"
 import {Input} from "@ui/input"
+import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
 
 import {Textarea} from "../ui/textarea"
 
@@ -35,18 +35,23 @@ export type CreateProblemFormValues = z.infer<typeof CreateProblemSchema>
 
 export type UpdateProblemFormValues = z.infer<typeof UpdateProblemSchema>
 
-interface ProblemFormProps {
-  tagsFromDb?: Tag[] | null
+export interface TagNames {
+  name: string
 }
 
-export const ProblemForm: React.FC<ProblemFormProps> = ({tagsFromDb}) => {
-  const {close, data} = useCreateProblemModal()
+interface ProblemFormProps {
+  user?: User | null
+}
+
+export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
+  const {close, data} = useUpdateProblemModal()
   const [isPending, startTransition] = useTransition()
   const defaultValues: CreateProblemFormValues = {
     title: data?.values?.title ?? "",
     description: data?.values?.description ?? "",
     tagNames: data?.values?.tagNames ?? [],
     code: data?.values?.code ?? "",
+    userId: data?.values?.userId ?? user?.id ?? "",
   }
 
   const form = useForm<CreateProblemFormValues>({
@@ -86,7 +91,7 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({tagsFromDb}) => {
         createProblem(values).then((res) => {
           if (res.error) {
             toast("Error", {
-              description: "Error al crear el problema",
+              description: res.error,
               action: {
                 label: "Reintentar",
                 onClick: () => {
@@ -185,7 +190,11 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({tagsFromDb}) => {
                       <FormItem>
                         <FormControl>
                           <div className="flex max-w-fit items-center gap-2">
-                            <ProblemInputSuggestionClient field={{...field}} tags={tagsFromDb} />
+                            <ProblemInputSuggestionClient
+                              field={{...field}}
+                              tags={[]}
+                              tagsAlreadySelected={defaultValues.tagNames}
+                            />
                             <Button
                               disabled={isPending}
                               size="icon"

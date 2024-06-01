@@ -86,6 +86,8 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
   const isAuthorProblem = userId === problem.user?.id
 
   const values: CreateProblemFormValues = {
+    userId: problem.user?.id || "",
+    code: problem.code || "",
     description: problem.description,
     title: problem.title,
     tagNames: problem.tags.map((tags) => ({

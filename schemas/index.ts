@@ -20,6 +20,7 @@ export const RegisterSchema = z
   })
 
 export const CreateProblemSchema = z.object({
+  userId: z.coerce.string(),
   title: z.string(),
   description: z.string(),
   tagNames: z

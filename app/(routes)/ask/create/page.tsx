@@ -3,14 +3,16 @@ import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {atomDark} from "react-syntax-highlighter/dist/esm/styles/prism"
 
 import {ProblemForm} from "@components/problem/problem-form"
-import {db} from "@/lib/db"
+import {auth} from "@/auth"
+import {getUserById} from "@/data/user/user"
 
 interface AskPageCreateProps {
   params: {problemId: string}
 }
 
 const AskPageCreate: React.FC<AskPageCreateProps> = async ({}) => {
-  const tags = await db.tag.findMany({})
+  const session = await auth()
+  const user = await getUserById(session?.user?.id)
 
   return (
     <main className="container flex flex-col gap-y-10 px-4 py-10 sm:px-6 lg:px-8">
@@ -71,7 +73,7 @@ const AskPageCreate: React.FC<AskPageCreateProps> = async ({}) => {
           </div>
         </div>
       </section>
-      <ProblemForm tagsFromDb={tags} />
+      <ProblemForm user={user} />
     </main>
   )
 }

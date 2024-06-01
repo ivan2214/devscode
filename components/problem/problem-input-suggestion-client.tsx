@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import {type Tag} from "@prisma/client"
 import {type ControllerRenderProps} from "react-hook-form"
 
 import {Button} from "@/components/ui/button"
@@ -18,16 +17,23 @@ import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer"
 import {useMediaQuery} from "@/hooks/use-media-query"
 
 import {CreateEmptyTag} from "./problem-create-empty-tag"
+import {type TagNames} from "./problem-form"
 
 interface ProblemInputSuggestionClientProps {
   field: ControllerRenderProps
-  tags?: Tag[] | null
+  tags?: TagNames[] | null
+  tagsAlreadySelected?: TagNames[] | null
 }
 
-export function ProblemInputSuggestionClient({field, tags}: ProblemInputSuggestionClientProps) {
+export function ProblemInputSuggestionClient({
+  field,
+  tags,
+  tagsAlreadySelected,
+}: ProblemInputSuggestionClientProps) {
   const [open, setOpen] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const [selectedStatus, setSelectedStatus] = React.useState<string | null | undefined>(null)
+  const allTags = [...(tags || []), ...(tagsAlreadySelected || [])]
 
   if (isDesktop) {
     return (
@@ -42,7 +48,7 @@ export function ProblemInputSuggestionClient({field, tags}: ProblemInputSuggesti
             field={{...field}}
             setOpen={setOpen}
             setSelectedStatus={setSelectedStatus}
-            tags={tags}
+            tags={allTags}
           />
         </PopoverContent>
       </Popover>
@@ -58,7 +64,12 @@ export function ProblemInputSuggestionClient({field, tags}: ProblemInputSuggesti
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
-          <TagsList field={{...field}} setOpen={setOpen} setSelectedStatus={setSelectedStatus} />
+          <TagsList
+            field={{...field}}
+            setOpen={setOpen}
+            setSelectedStatus={setSelectedStatus}
+            tags={allTags}
+          />
         </div>
       </DrawerContent>
     </Drawer>
@@ -73,7 +84,7 @@ function TagsList({
 }: {
   setOpen: (open: boolean) => void
   setSelectedStatus: (tag?: string) => void
-  tags?: Tag[] | null
+  tags?: TagNames[] | null
   field: ControllerRenderProps
 }) {
   const [currentSearchValue, setCurrentSearchValue] = React.useState("")
@@ -93,7 +104,7 @@ function TagsList({
         <CommandGroup>
           {tags?.map((tag) => (
             <CommandItem
-              key={tag.id}
+              key={tag.name}
               value={tag.name}
               onSelect={(value: string) => {
                 const valueMatch = tags?.find((tag) => tag.name === value)

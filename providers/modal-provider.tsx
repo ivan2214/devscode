@@ -3,6 +3,7 @@
 import {useEffect, useState} from "react"
 
 import {ManageAccountUserModal} from "@components/modals/manage-account-user-modal"
+import {UpdateProblemModal} from "@/components/modals/update-problem-modal"
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -15,5 +16,10 @@ export const ModalProvider = () => {
     return null
   }
 
-  return <ManageAccountUserModal />
+  return (
+    <>
+      <ManageAccountUserModal />
+      <UpdateProblemModal />
+    </>
+  )
 }

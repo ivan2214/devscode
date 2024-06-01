@@ -18,7 +18,7 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
       <Link href={`/problem/${problem.id}`}>
         <CardHeader className="flex w-full flex-col items-start gap-y-5">
           <div className="flex items-center space-x-2">
-            <Icon className="h-6 w-6 text-gray-500 dark:text-gray-400" name="code" />
+            <Icon className="h-4 w-4" name="code" />
             <CardTitle>{problem.title}</CardTitle>
           </div>
           <div className="flex items-center gap-x-2">
@@ -35,7 +35,10 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
         <CardFooter className="flex w-full flex-col items-start gap-y-3">
           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
             <Avatar>
-              <AvatarImage alt="@shadcn" src={problem.user?.image ?? ""} />
+              <AvatarImage
+                alt={problem.user?.name}
+                src={problem.user?.image ?? "https://github.com/shadcn.png"}
+              />
               <AvatarFallback>{problem.user?.name[0]}</AvatarFallback>
             </Avatar>
             <span>{problem.user?.name}</span>

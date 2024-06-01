@@ -1,18 +1,20 @@
 "use client"
 
 import {PencilIcon} from "lucide-react"
+import {type Tag} from "@prisma/client"
 
 import {Button} from "@ui/button"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
-import {useCreateProblemModal} from "@/store/use-create-problem-modal"
+import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
 
 interface ButtonOpenModalEditProps {
   problemId: string
   values: CreateProblemFormValues
+  tagsFromDb?: Tag[]
 }
 
 export const ButtonOpenModalEdit: React.FC<ButtonOpenModalEditProps> = ({problemId, values}) => {
-  const {openEditModal} = useCreateProblemModal()
+  const {openEditModal} = useUpdateProblemModal()
 
   return (
     <Button
