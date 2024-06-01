@@ -18,7 +18,6 @@ import {CreateEmptyTag} from "./problem/problem-create-empty-tag"
 export function TagsList({
   setOpen,
   setSelectedStatus,
-
   field,
 }: {
   setOpen: (open: boolean) => void
@@ -49,7 +48,7 @@ export function TagsList({
         onValueChange={(e) => onValueChange(e)}
       />
       <CommandList>
-        {!tagMatchResult?.length ? (
+        {!tagMatchResult?.length && currentSearchValue ? (
           <CommandEmpty>
             <CreateEmptyTag
               currentValue={currentSearchValue || "tags"}

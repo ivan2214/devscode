@@ -190,11 +190,7 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
                       <FormItem>
                         <FormControl>
                           <div className="flex max-w-fit items-center gap-2">
-                            <ProblemInputSuggestionClient
-                              field={{...field}}
-                              tags={[]}
-                              tagsAlreadySelected={defaultValues.tagNames}
-                            />
+                            <ProblemInputSuggestionClient field={{...field}} />
                             <Button
                               disabled={isPending}
                               size="icon"
