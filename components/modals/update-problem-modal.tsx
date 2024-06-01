@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@components/ui/dialog"
 import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
-import {ProblemForm} from "@components/problem/problem-form"
+import ProblemForm from "@components/problem/problem-form"
 
 export const UpdateProblemModal = () => {
   const {isOpen, close} = useUpdateProblemModal()
