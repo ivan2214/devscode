@@ -8,6 +8,7 @@ import {type z} from "zod"
 import {useFieldArray, useForm} from "react-hook-form"
 import {Loader, PlusIcon} from "lucide-react"
 import {TrashIcon} from "@radix-ui/react-icons"
+import {type Tag} from "@prisma/client"
 
 import {Button} from "@ui/button"
 import {
@@ -28,12 +29,17 @@ import {Input} from "@ui/input"
 import {Textarea} from "../ui/textarea"
 
 import ProblemDetails from "./problem-details"
+import {ProblemInputSuggestionClient} from "./problem-input-suggestion-client"
 
 export type CreateProblemFormValues = z.infer<typeof CreateProblemSchema>
 
 export type UpdateProblemFormValues = z.infer<typeof UpdateProblemSchema>
 
-export const ProblemForm: React.FC = () => {
+interface ProblemFormProps {
+  tagsFromDb?: Tag[] | null
+}
+
+export const ProblemForm: React.FC<ProblemFormProps> = ({tagsFromDb}) => {
   const {close, data} = useCreateProblemModal()
   const [isPending, startTransition] = useTransition()
   const defaultValues: CreateProblemFormValues = {
@@ -179,7 +185,7 @@ export const ProblemForm: React.FC = () => {
                       <FormItem>
                         <FormControl>
                           <div className="flex max-w-fit items-center gap-2">
-                            <Input {...field} />
+                            <ProblemInputSuggestionClient field={{...field}} tags={tagsFromDb} />
                             <Button
                               disabled={isPending}
                               size="icon"

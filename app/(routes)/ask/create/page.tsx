@@ -3,12 +3,15 @@ import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {atomDark} from "react-syntax-highlighter/dist/esm/styles/prism"
 
 import {ProblemForm} from "@components/problem/problem-form"
+import {db} from "@/lib/db"
 
 interface AskPageCreateProps {
   params: {problemId: string}
 }
 
-const AskPageCreate: React.FC<AskPageCreateProps> = ({}) => {
+const AskPageCreate: React.FC<AskPageCreateProps> = async ({}) => {
+  const tags = await db.tag.findMany({})
+
   return (
     <main className="container flex flex-col gap-y-10 px-4 py-10 sm:px-6 lg:px-8">
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 lg:px-8 ">
@@ -68,7 +71,7 @@ const AskPageCreate: React.FC<AskPageCreateProps> = ({}) => {
           </div>
         </div>
       </section>
-      <ProblemForm />
+      <ProblemForm tagsFromDb={tags} />
     </main>
   )
 }
