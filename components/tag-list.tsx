@@ -1,6 +1,7 @@
 "use client"
 import {type ControllerRenderProps} from "react-hook-form"
-import {useState} from "react"
+import {useState, useTransition} from "react"
+import {type Tag} from "@prisma/client"
 
 import {
   Command,
@@ -10,25 +11,34 @@ import {
   CommandItem,
   CommandList,
 } from "@ui/command"
+import {tagsMatch} from "@/actions/tag/tags-match"
 
-import {type TagNames} from "./problem/problem-form"
 import {CreateEmptyTag} from "./problem/problem-create-empty-tag"
 
 export function TagsList({
   setOpen,
   setSelectedStatus,
-  tags,
+
   field,
 }: {
   setOpen: (open: boolean) => void
   setSelectedStatus: (tag?: string) => void
-  tags?: TagNames[] | null
+
   field: ControllerRenderProps
 }) {
   const [currentSearchValue, setCurrentSearchValue] = useState("")
+  const [tagMatchResult, setTagMatchResult] = useState<Tag[] | null>(null)
+  const [, startTransition] = useTransition()
 
   const onValueChange = (value: string) => {
     setCurrentSearchValue(value)
+    startTransition(() => {
+      tagsMatch(value).then((res) => {
+        if (res?.tags) {
+          setTagMatchResult(res?.tags)
+        }
+      })
+    })
   }
 
   return (
@@ -39,24 +49,26 @@ export function TagsList({
         onValueChange={(e) => onValueChange(e)}
       />
       <CommandList>
-        <CommandEmpty>
-          <CreateEmptyTag
-            currentValue={currentSearchValue || "tags"}
-            field={{...field}}
-            setOpen={setOpen}
-            setSelectedStatus={setSelectedStatus}
-          />
-        </CommandEmpty>
+        {!tagMatchResult?.length ? (
+          <CommandEmpty>
+            <CreateEmptyTag
+              currentValue={currentSearchValue || "tags"}
+              field={{...field}}
+              setOpen={setOpen}
+              setSelectedStatus={setSelectedStatus}
+            />
+          </CommandEmpty>
+        ) : null}
         <CommandGroup>
-          {tags?.map((tag) => (
+          {tagMatchResult?.map((tag) => (
             <CommandItem
               key={tag.name}
               value={tag.name}
               onSelect={(value: string) => {
-                const valueMatch = tags?.find((tag) => tag.name === value)
+                const valueMatch = tagMatchResult?.find((tag) => tag.name === value)
 
                 setSelectedStatus(valueMatch?.name)
-
+                setCurrentSearchValue(valueMatch?.name || "")
                 setOpen(false)
                 field.onChange(value)
               }}
