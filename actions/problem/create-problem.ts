@@ -1,5 +1,7 @@
 "use server"
 
+import {type Tag} from "@prisma/client"
+
 import {auth} from "auth"
 import {CreateProblemSchema} from "@/schemas"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
@@ -20,41 +22,49 @@ export const createProblem = async (values: CreateProblemFormValues) => {
     return {error: "Invalid fields!"}
   }
 
-  const tags = await db.tag.findMany({
-    where: {
-      name: {
-        in: tagNames?.map((tag) => tag.name),
-      },
-    },
-  })
-
-  const tagsIds: string[] = tags.map((tag) => tag.id)
-
-  if (!tags.length && tagNames?.length) {
-    const newTags = await db.tag.createManyAndReturn({
-      data: tagNames,
-      select: {id: true},
-    })
-
-    tagsIds.push(...newTags.map((tag) => tag.id))
-  }
-
-  await db.problem.create({
+  const newProblem = await db.problem.create({
     data: {
       description,
       title,
       userId,
       code,
-      tags: {
-        createMany: {
-          data: tagsIds.map((id) => ({
-            tagId: id,
-          })),
-          skipDuplicates: true,
-        },
-      },
     },
   })
+
+  if (tagNames) {
+    const tagsAlreadyExist = await db.tag.findMany({
+      where: {
+        name: {
+          in: tagNames.map((tag) => tag.name),
+        },
+      },
+    })
+
+    const tagsNotExist = tagNames.filter(
+      (tag) => !tagsAlreadyExist.some((t) => t.name === tag.name),
+    )
+
+    let allTags: Tag[] = [...tagsAlreadyExist]
+
+    if (tagsNotExist.length > 0) {
+      const newTags = await db.tag.createManyAndReturn({
+        data: tagsNotExist.map((tag) => ({
+          name: tag.name,
+        })),
+      })
+
+      allTags = [...allTags, ...newTags]
+    }
+
+    if (allTags && allTags.length > 0) {
+      await db.tagsOnProblem.createMany({
+        data: allTags.map((tag) => ({
+          tagId: tag.id,
+          problemId: newProblem.id,
+        })),
+      })
+    }
+  }
 
   return {success: "Problemt created successfully!"}
 }
