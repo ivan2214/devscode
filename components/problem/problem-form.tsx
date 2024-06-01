@@ -2,65 +2,47 @@
 
 import {toast} from "sonner"
 import {useRouter} from "next/navigation"
-import {useEffect, useState, useTransition} from "react"
+import {useTransition} from "react"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {type z} from "zod"
 import {useFieldArray, useForm} from "react-hook-form"
-import {Loader, PlusIcon} from "lucide-react"
-import {TrashIcon} from "@radix-ui/react-icons"
 import {type User} from "@prisma/client"
 
-import {Button} from "@ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form"
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@ui/form"
 import {CreateProblemSchema, type UpdateProblemSchema} from "@/schemas"
 import {createProblem} from "@/actions/problem/create-problem"
 import {updateProblem} from "@/actions/problem/update-problem"
 import {Input} from "@ui/input"
 import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
-
-import {Textarea} from "../ui/textarea"
-
-import ProblemDetails from "./problem-details"
-import {ProblemInputSuggestionClient} from "./problem-input-suggestion-client"
+import {Textarea} from "@ui/textarea"
+import {TagsSection} from "@components/problem/tag-section"
+import {CodeSection} from "@components/problem/code-section"
+import {FormActions} from "@components/problem/form-actions-section"
+import {useClientOnly} from "@/hooks/use-client-only"
+import {useResetForm} from "@components/problem/hook/use-reset-form-problem"
+import {useDefaultValues} from "@components/problem/hook/use-default-values"
 
 export type CreateProblemFormValues = z.infer<typeof CreateProblemSchema>
 
 export type UpdateProblemFormValues = z.infer<typeof UpdateProblemSchema>
 
-export interface TagNames {
-  name: string
-}
-
 interface ProblemFormProps {
   user?: User | null
 }
 
-export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
+const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
   const {close, data} = useUpdateProblemModal()
   const [isPending, startTransition] = useTransition()
-  const defaultValues: CreateProblemFormValues = {
-    title: data?.values?.title ?? "",
-    description: data?.values?.description ?? "",
-    tagNames: data?.values?.tagNames ?? [],
-    code: data?.values?.code ?? "",
-    userId: data?.values?.userId ?? user?.id ?? "",
-  }
-
+  const defaultValues = useDefaultValues(user, data)
   const form = useForm<CreateProblemFormValues>({
     resolver: zodResolver(CreateProblemSchema),
     defaultValues,
     mode: "onChange",
   })
   const router = useRouter()
-  const [isClient, setIsClient] = useState(false)
+  const isClient = useClientOnly()
+
+  useResetForm(form, data)
 
   const {
     fields: tagFields,
@@ -71,64 +53,35 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
     control: form.control,
   })
 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
+  if (!isClient) return null
 
-  useEffect(() => {
-    if (data?.values) {
-      form.reset(data?.values)
+  const handleFormSubmit = async (values: CreateProblemFormValues) => {
+    const action = (values: CreateProblemFormValues, id?: string) =>
+      id ? updateProblem(values, id) : createProblem(values)
+    const res = await action(values, data?.problemId)
+
+    if (res.error) {
+      toast("Error", {
+        description: res.error,
+        action: {
+          label: "Reintentar",
+          onClick: () => handleFormSubmit(values),
+        },
+      })
     }
-  }, [data?.values, form])
 
-  if (!isClient) {
-    return null
+    if (res.success) {
+      toast("Success", {
+        description: `Problema ${data?.problemId ? "actualizado" : "creado"} correctamente`,
+      })
+      close()
+      router.refresh()
+    }
   }
 
   const onSubmit = (values: CreateProblemFormValues) => {
-    startTransition(() => {
-      if (!data?.problemId) {
-        createProblem(values).then((res) => {
-          if (res.error) {
-            toast("Error", {
-              description: res.error,
-              action: {
-                label: "Reintentar",
-                onClick: () => {
-                  onSubmit(values)
-                },
-              },
-            })
-          }
-
-          if (res.success) {
-            toast("Success", {
-              description: "Problema creado correctamente",
-            })
-            close()
-            router.refresh()
-          }
-        })
-      } else if (data?.problemId && data.values) {
-        updateProblem(values, data.problemId).then((res) => {
-          if (res.error) {
-            toast("Error", {
-              description: res.error,
-            })
-          }
-          if (res.success) {
-            toast("Success", {
-              description: "Problema actualizado correctamente",
-              closeButton: true,
-              position: "top-center",
-            })
-          }
-        })
-      }
-    })
+    startTransition(() => handleFormSubmit(values))
   }
-
-  const tags = form.watch("tagNames") as {name: string}[]
 
   const buttonTitle = data?.problemId ? "Actualizar problema" : "Crear problema"
   const buttonLoadingTitle = data?.problemId ? "Actualizando problema" : "Creando problema"
@@ -151,7 +104,6 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -171,92 +123,24 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({user}) => {
               )}
             />
           </div>
-          {/* Tags */}
-          <section className="grid grid-cols-1 gap-6">
-            <div className="flex flex-col items-start gap-5">
-              <FormLabel>Tags</FormLabel>
-              <FormDescription>
-                Agrega etiquetas para que los usuarios puedan encontrar tu problema
-              </FormDescription>
-            </div>
-            {tagFields.length ? (
-              <div className="flex flex-wrap items-center gap-5">
-                {tagFields.map((field, index) => (
-                  <FormField
-                    key={field.id}
-                    control={form.control}
-                    name={`tagNames.${index}.name`}
-                    render={({field}) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="flex max-w-fit items-center gap-2">
-                            <ProblemInputSuggestionClient field={{...field}} />
-                            <Button
-                              disabled={isPending}
-                              size="icon"
-                              type="button"
-                              variant="destructive"
-                              onClick={() => removeTag(index)}
-                            >
-                              <TrashIcon className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-            ) : null}
-          </section>
-          <div>
-            <Button
-              className="mt-2"
-              disabled={isPending || tags.map((tag) => tag.name).includes("")}
-              type="button"
-              variant="outline"
-              onClick={() => appendTag({name: ""})}
-            >
-              <PlusIcon className="mr-2 h-4 w-4" /> Añadir tag
-            </Button>
-          </div>
-          {/* fin Tags */}
-        </section>
-        {/* Code */}
-        <section>
-          <FormField
-            control={form.control}
-            name="code"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>Tu código</FormLabel>
-                <FormControl>
-                  <ProblemDetails field={{...field}} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <TagsSection
+            appendTag={appendTag}
+            form={form}
+            isPending={isPending}
+            removeTag={removeTag}
+            tagFields={tagFields}
           />
         </section>
-        {/* fin Code */}
-        <div className="flex justify-end gap-4">
-          <Button
-            disabled={isPending}
-            type="button"
-            variant="destructive"
-            onClick={() => {
-              close()
-            }}
-          >
-            Cancelar
-          </Button>
-          <Button disabled={isPending} type="submit">
-            {isPending ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
-            {isPending ? buttonLoadingTitle : buttonTitle}
-          </Button>
-        </div>
+        <CodeSection form={form} />
+        <FormActions
+          buttonLoadingTitle={buttonLoadingTitle}
+          buttonTitle={buttonTitle}
+          close={close}
+          isPending={isPending}
+        />
       </form>
     </Form>
   )
 }
+
+export default ProblemForm

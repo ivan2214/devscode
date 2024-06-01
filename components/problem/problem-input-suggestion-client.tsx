@@ -3,9 +3,9 @@
 import {useState} from "react"
 import {type ControllerRenderProps} from "react-hook-form"
 
-import {Button} from "@/components/ui/button"
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
-import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer"
+import {Button} from "@components/ui/button"
+import {Popover, PopoverContent, PopoverTrigger} from "@components/ui/popover"
+import {Drawer, DrawerContent, DrawerTrigger} from "@components/ui/drawer"
 import {useMediaQuery} from "@/hooks/use-media-query"
 
 import {TagsList} from "../tag-list"

@@ -5,7 +5,10 @@ import {db} from "@/lib/db"
 import {UpdateProblemSchema} from "@/schemas"
 import {type UpdateProblemFormValues} from "@components/problem/problem-form"
 
-export const updateProblem = async (values: UpdateProblemFormValues, problemId: string) => {
+export const updateProblem = async (
+  values: UpdateProblemFormValues,
+  problemId?: string | undefined,
+) => {
   // Validar los campos de entrada
   const validatedFields = UpdateProblemSchema.safeParse(values)
 

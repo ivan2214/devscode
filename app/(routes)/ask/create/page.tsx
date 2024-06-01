@@ -2,9 +2,9 @@ import React from "react"
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {atomDark} from "react-syntax-highlighter/dist/esm/styles/prism"
 
-import {ProblemForm} from "@components/problem/problem-form"
 import {auth} from "@/auth"
 import {getUserById} from "@/data/user/user"
+import ProblemForm from "@/components/problem/problem-form"
 
 interface AskPageCreateProps {
   params: {problemId: string}

@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@components/ui/dialog"
 import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
 import {ProblemForm} from "@components/problem/problem-form"
 
