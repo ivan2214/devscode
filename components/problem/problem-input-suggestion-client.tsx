@@ -4,19 +4,12 @@ import * as React from "react"
 import {type ControllerRenderProps} from "react-hook-form"
 
 import {Button} from "@/components/ui/button"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer"
 import {useMediaQuery} from "@/hooks/use-media-query"
 
-import {CreateEmptyTag} from "./problem-create-empty-tag"
+import {TagsList} from "../tag-list"
+
 import {type TagNames} from "./problem-form"
 
 interface ProblemInputSuggestionClientProps {
@@ -73,53 +66,5 @@ export function ProblemInputSuggestionClient({
         </div>
       </DrawerContent>
     </Drawer>
-  )
-}
-
-function TagsList({
-  setOpen,
-  setSelectedStatus,
-  tags,
-  field,
-}: {
-  setOpen: (open: boolean) => void
-  setSelectedStatus: (tag?: string) => void
-  tags?: TagNames[] | null
-  field: ControllerRenderProps
-}) {
-  const [currentSearchValue, setCurrentSearchValue] = React.useState("")
-
-  return (
-    <Command>
-      <CommandInput placeholder="Filter tag..." onValueChange={(e) => setCurrentSearchValue(e)} />
-      <CommandList>
-        <CommandEmpty>
-          <CreateEmptyTag
-            currentValue={currentSearchValue || "tags"}
-            field={{...field}}
-            setOpen={setOpen}
-            setSelectedStatus={setSelectedStatus}
-          />
-        </CommandEmpty>
-        <CommandGroup>
-          {tags?.map((tag) => (
-            <CommandItem
-              key={tag.name}
-              value={tag.name}
-              onSelect={(value: string) => {
-                const valueMatch = tags?.find((tag) => tag.name === value)
-
-                setSelectedStatus(valueMatch?.name)
-
-                setOpen(false)
-                field.onChange(value)
-              }}
-            >
-              {tag.name}
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </Command>
   )
 }
