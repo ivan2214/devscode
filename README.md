@@ -1,6 +1,6 @@
-# Contribuir a [Nombre del Proyecto]
+# Contribuir a devscode
 
-¡Gracias por tu interés en contribuir a [Nombre del Proyecto]! Estamos emocionados de recibir tu ayuda. Antes de comenzar, por favor, lee las siguientes pautas para contribuir.
+¡Gracias por tu interés en contribuir a devscode! Estamos emocionados de recibir tu ayuda. Antes de comenzar, por favor, lee las siguientes pautas para contribuir.
 
 ## Cómo Contribuir
 
@@ -9,7 +9,7 @@
 2. **Clona el Repositorio**: Clona tu repositorio recién creado a tu máquina local utilizando el comando:
 
     ```bash
-    git clone https://github.com/TU_USUARIO/[Nombre del Proyecto].git
+    git clone https://github.com/TU_USUARIO/devscode.git
     ```
 
 3. **Crea una Rama (Branch)**: Crea una rama para trabajar en tu contribución utilizando un nombre descriptivo. Por ejemplo:
@@ -50,5 +50,5 @@ Este proyecto sigue el enfoque de versionado semántico para numerar las version
 - **Menor (Minor)**: Para nuevas funcionalidades o mejoras sin romper nada existente.
 - **Parche (Patch)**: Para correcciones de errores o soluciones sin añadir nuevas funciones.
 
-¡Gracias por tu contribución y por ayudar a hacer de [Nombre del Proyecto] un mejor software!
+¡Gracias por tu contribución y por ayudar a hacer de devscode un mejor software!
 
