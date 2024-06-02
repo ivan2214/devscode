@@ -134,7 +134,7 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({
     router.push(createUrl(pathname, newParams))
   }
 
-  const isValidIconTag = selectedTag && selectedTag in TagIcons
+  const isValidIcon = selectedTag !== "All" && selectedTag && selectedTag in TagIcons
 
   if (isDesktop) {
     return (
@@ -157,7 +157,7 @@ export const SideFilterItems: React.FC<SideFilterItemsProps> = ({
             variant="outline"
             onClick={() => removeParam("tags")}
           >
-            {selectedTag !== "all" && isValidIconTag ? (
+            {selectedTag !== "all" && isValidIcon ? (
               <TagIcon className="h-5 w-5" name={selectedTag} />
             ) : (
               <Icon className="h-5 w-5" name="tag" />

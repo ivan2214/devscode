@@ -6,6 +6,7 @@ import {useState} from "react"
 import {Badge} from "@ui/badge"
 import {Button} from "@ui/button"
 import {type QueryProps} from "@/data/problem/get-filtered-problems"
+import {TagIcon, TagIcons} from "@/components/ui/tag-icon"
 
 interface QueryComponentProps {
   searchParams?: QueryProps
@@ -13,27 +14,12 @@ interface QueryComponentProps {
 
 export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) => {
   const [isLoading, setIsLoading] = useState(false)
-  const {tags, keyword, status} = searchParams ?? {}
+  const {tags, keyword, status, skip, sortBy, sortByType, take} = searchParams ?? {}
   const router = useRouter()
   const pathname = usePathname()
   let tagsArray = tags?.split(",")
 
-  const removeQuery = ({
-    param,
-    value,
-  }: {
-    param:
-      | "tags"
-      | "minPriority"
-      | "maxPriority"
-      | "latitude"
-      | "longitude"
-      | "keyword"
-      | "sortBy"
-      | "sortOrder"
-      | "status"
-    value?: string
-  }) => {
+  const removeQuery = ({param, value}: {param: keyof QueryProps; value?: string}) => {
     setIsLoading(true)
     const params = {...searchParams}
 
@@ -45,8 +31,20 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
       delete params.sortBy
     }
 
-    if (param === "sortOrder") {
-      delete params.sortOrder
+    if (param === "sortByType") {
+      delete params.sortByType
+    }
+
+    if (param === "status") {
+      delete params.status
+    }
+
+    if (param === "take") {
+      delete params.take
+    }
+
+    if (param === "skip") {
+      delete params.skip
     }
 
     if (param === "tags" && value) {
@@ -83,28 +81,28 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
       <div className="mt-4 flex w-full flex-wrap gap-2">
         {tags
-          ? tagsArray?.map((category) => (
-              <Badge
-                key={category}
-                className="flex items-center justify-between capitalize"
-                variant="outline"
-              >
-                {category}
+          ? tagsArray?.map((tag) => {
+              const isValidIcon = tag !== "All" && tag in TagIcons
+
+              return (
                 <Button
+                  key={tag}
+                  className="flex items-center justify-between gap-2 capitalize"
                   disabled={isLoading}
-                  size="icon"
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => {
                     removeQuery({
                       param: "tags",
-                      value: category,
+                      value: tag,
                     })
                   }}
                 >
+                  {isValidIcon ? <TagIcon className="h-4 w-4" name={tag} /> : null}
+                  {tag}
                   <TrashIcon className="h-4 w-4 text-destructive" />
                 </Button>
-              </Badge>
-            ))
+              )
+            })
           : null}
         {status ? (
           <Badge className="flex items-center justify-between capitalize" variant="outline">
@@ -135,6 +133,60 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 removeQuery({
                   param: "keyword",
                   value: keyword,
+                })
+              }}
+            >
+              <TrashIcon className="h-4 w-4 text-destructive" />
+            </Button>
+          </Badge>
+        ) : null}
+        {sortBy ? (
+          <Badge className="flex items-center justify-between capitalize" variant="outline">
+            {sortBy}
+            <Button
+              disabled={isLoading}
+              size="icon"
+              variant="ghost"
+              onClick={() => {
+                removeQuery({
+                  param: "sortBy",
+                  value: sortBy,
+                })
+              }}
+            >
+              <TrashIcon className="h-4 w-4 text-destructive" />
+            </Button>
+          </Badge>
+        ) : null}
+        {sortByType ? (
+          <Badge className="flex items-center justify-between capitalize" variant="outline">
+            {sortByType}
+            <Button
+              disabled={isLoading}
+              size="icon"
+              variant="ghost"
+              onClick={() => {
+                removeQuery({
+                  param: "sortByType",
+                  value: sortByType,
+                })
+              }}
+            >
+              <TrashIcon className="h-4 w-4 text-destructive" />
+            </Button>
+          </Badge>
+        ) : null}
+        {take ? (
+          <Badge className="flex items-center justify-between capitalize" variant="outline">
+            {take}
+            <Button
+              disabled={isLoading}
+              size="icon"
+              variant="ghost"
+              onClick={() => {
+                removeQuery({
+                  param: "take",
+                  value: take,
                 })
               }}
             >
