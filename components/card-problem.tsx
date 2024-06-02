@@ -6,7 +6,7 @@ import {Badge} from "@ui/badge"
 import {Button} from "@ui/button"
 import Icon from "@ui/icon"
 import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
-import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
+import {type ProblemExtends} from "@/types"
 import {cn} from "@/lib/utils"
 
 import {TagIcon, TagIcons} from "./ui/tag-icon"
@@ -24,7 +24,7 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
         </CardHeader>
         <CardContent className="flex flex-col gap-y-5">
           <section className="flex w-full flex-wrap items-center gap-2">
-            {problem.tags.map((tags) => {
+            {problem?.tags?.map((tags) => {
               const tag = tags.tag
               const isValidTagIcon = tag.name in TagIcons
 
@@ -50,7 +50,7 @@ export const CardProblem: React.FC<CardProblemProps> = ({problem}) => {
           <section className="flex w-full flex-wrap items-center gap-2">
             <Badge variant="outline">Vistas: {problem.views}</Badge>
             <Badge variant="outline">Likes: {problem.likes}</Badge>
-            <Badge variant="outline">Comentarios: {problem.comments.length}</Badge>
+            <Badge variant="outline">Comentarios: {problem?.comments?.length}</Badge>
           </section>
           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
             <Avatar>

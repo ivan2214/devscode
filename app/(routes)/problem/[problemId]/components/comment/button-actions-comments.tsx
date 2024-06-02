@@ -11,7 +11,7 @@ import Icon from "@components/ui/icon"
 import {Button} from "@ui/button"
 import {CommentActionSchema} from "@/schemas"
 import {actionsComment} from "@/actions/comment/actions-comment"
-import {type ReplyExtends, type CommentExtends} from "@/data/problem/get-filtered-problems"
+import {type ReplyExtends, type CommentExtends} from "@/types"
 
 interface ButtonActionsCommentsProps {
   comment?: CommentExtends

@@ -1,82 +1,26 @@
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
 import hljs from "highlight.js"
-import {type Metadata} from "next"
 
-import {Button} from "@ui/button"
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@ui/tooltip"
-import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
+import {generateMetadata as generateMetadataFunction} from "@/utils/problem/metadata"
+import {generateStaticParams as generateStaticParamsFunction} from "@/utils/problem/params"
 import {auth} from "auth"
-import {db} from "@/lib/db"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
-import {Badge} from "@/components/ui/badge"
-import Icon from "@/components/ui/icon"
 import {getProblem} from "@/data/problem/get-problem"
 import {type ProblemExtends} from "@/types"
-
-import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
-import {ButtonChangeStatus} from "./components/button-change-status"
-import {ButtonDeleteProblem} from "./components/button-delete-problem"
-import {Comments} from "./components/comment/comments"
+import ProblemDetails from "@/app/(routes)/problem/[problemId]/components/problem-details"
+import ProblemComments from "@/app/(routes)/problem/[problemId]/components/problem-comments"
+import ProblemActions from "@/app/(routes)/problem/[problemId]/components/problem-actions"
 
 interface ProblemPageProps {
   params: {problemId: string}
 }
 
-/* export const dynamicParams = false */
-
-export async function generateStaticParams({params: {prblemId}}: {params: {prblemId: string}}) {
-  const problems = await db.problem.findMany({
-    where: {
-      id: prblemId,
-    },
-  })
-
-  return problems.map((problem) => ({
-    problem: problem.id,
-  }))
+export async function generateStaticParams({params: {problemId}}: {params: {problemId: string}}) {
+  return generateStaticParamsFunction({params: {problemId}})
 }
 
-export const generateMetadata = async ({
-  params: {problemId},
-}: ProblemPageProps): Promise<Metadata> => {
-  const {problem} = await getProblem(problemId)
-
-  return {
-    title: problem?.title,
-    description: problem?.description,
-    openGraph: {
-      title: problem?.title,
-      description: problem?.description,
-      type: "website",
-      url: `${process.env.PAGE_URL}/problem/${problemId}`,
-      siteName: "Devs Code",
-      locale: "es-AR",
-      countryName: "Argentina",
-    },
-    twitter: {
-      card: "summary",
-      title: problem?.title,
-      description: problem?.description,
-
-      site: `${process.env.PAGE_URL}/problem/${problemId}`,
-      creator: "@DevsCode",
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-      },
-    },
-    alternates: {
-      canonical: `${process.env.PAGE_URL}/problem/${problemId}`,
-    },
-    keywords: problem?.tags?.map(({tag}) => tag.name),
-    authors: [{name: "Devs Code", url: "https://Devscode.dev"}],
-  }
-}
+export const generateMetadata = generateMetadataFunction
 
 const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
   const session = await auth()
@@ -101,7 +45,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
     description: problem.description,
     title: problem.title,
     tagNames: problem.tags?.map((tags) => ({
-      name: tags?.tag.name,
+      name: tags.tag.name,
     })),
   }
 
@@ -126,7 +70,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
           <div>
             <h1 className="text-3xl font-bold">{problem.title}</h1>
             <p className="text-gray-500 dark:text-gray-400">
-              Repordado por {creatorName(problem.user)} el{" "}
+              Reportado por {creatorName(problem.user)} el{" "}
               {new Date(problem.createdAt).toLocaleDateString()}
             </p>
           </div>
@@ -134,125 +78,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
             <p className="space-y-4 text-gray-500 dark:text-gray-400">{problem.description}</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="tag" />
-                <span className="text-sm font-medium">Categorías:</span>
-                {problem.tags?.map((tags) => <Badge key={tags?.tag.id}>{tags?.tag.name}</Badge>)}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="user" />
-                <span className="text-sm font-medium">Creado por:</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <span className="text-sm text-blue-500 hover:underline">
-                        {creatorName(problem.user)}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent className="border shadow-xl">
-                      <article className="flex items-start gap-2">
-                        <Avatar>
-                          <AvatarImage src={problem.user?.image || ""} />
-                          <AvatarFallback>{creatorName(problem.user)}</AvatarFallback>
-                        </Avatar>
-                        <section className="flex flex-col items-start gap-y-2">
-                          <div className="flex items-center gap-x-2">
-                            <span className="text-sm font-bold">Username:</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                              {problem.user?.username}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-x-2">
-                            <span className="text-sm font-bold">Email:</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                              {problem.user?.email}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-x-2">
-                            <span className="text-sm font-bold">Problemas resueltos:</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                              {problem.user?._count.problemsResolved?.toString()}
-                            </span>
-                          </div>
-                        </section>
-                      </article>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              {problem?.ProblemsResolved?.length ? (
-                <div className="flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="check" />
-                  <span className="text-sm font-medium">Resuelto por:</span>
-                  {problem.ProblemsResolved?.map((problemResolved) => (
-                    <TooltipProvider key={problemResolved.id}>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-sm text-blue-500 hover:underline">
-                            {creatorName(problemResolved.resolver)}
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent className="border shadow-xl">
-                          <article className="flex items-start gap-2">
-                            <Avatar>
-                              <AvatarImage src={problemResolved.resolver?.image || ""} />
-                              <AvatarFallback>
-                                {creatorName(problemResolved.resolver)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <section className="flex flex-col items-start gap-y-2">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-sm font-bold">Username:</span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">
-                                  {problemResolved.resolver?.username}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-sm font-bold">Email:</span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">
-                                  {problemResolved.resolver?.email}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-sm font-bold">Problemas resueltos:</span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">
-                                  {problemResolved.resolver?._count?.problemsResolved?.toString()}
-                                </span>
-                              </div>
-                            </section>
-                          </article>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="calendar" />
-                <span className="text-sm font-medium">Creado:</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(problem.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="clock" />
-                <span className="text-sm font-medium">Ultima actualización:</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(problem.updatedAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="flag" />
-                <span className="text-sm font-medium">Estado:</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">{problem.status}</span>
-              </div>
-            </div>
-          </div>
+          <ProblemDetails creatorName={creatorName} problem={problem} />
 
           {/* Codigo */}
           {problem.code ? (
@@ -261,9 +87,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
                 Detected Language: {detectLanguage(problem.code)}
               </div>
               <SyntaxHighlighter
-                customStyle={{
-                  borderRadius: "0.25rem",
-                }}
+                customStyle={{borderRadius: "0.25rem"}}
                 language={detectLanguage(problem.code)}
                 style={vscDarkPlus}
               >
@@ -272,36 +96,14 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
             </div>
           ) : null}
 
-          {/* Comments */}
-          <Comments isAuthorProblem={isAuthorProblem} problem={problem} />
+          <ProblemComments isAuthorProblem={isAuthorProblem} problem={problem} />
 
-          {/* Actions */}
-          <div className="flex justify-between gap-2">
-            {isAuthorProblem ? (
-              <div className="flex gap-2">
-                <ButtonOpenModalEdit problemId={problem.id} values={values} />
-                <ButtonChangeStatus
-                  problemId={problem.id}
-                  values={{
-                    problemId: problem.id,
-                    status: problem.status,
-                  }}
-                />
-
-                <ButtonDeleteProblem problemId={problem.id} />
-              </div>
-            ) : null}
-            <div className="flex gap-2">
-              <Button className="flex items-center gap-x-2" size="sm" variant="outline">
-                <Icon className="h-4 w-4" name="share" />
-                Share
-              </Button>
-              <Button className="flex items-center gap-x-2" size="sm" variant="outline">
-                <Icon className="h-4 w-4" name="mail" />
-                Email
-              </Button>
-            </div>
-          </div>
+          <ProblemActions
+            isAuthorProblem={isAuthorProblem}
+            problemId={problem.id}
+            problemStatus={problem.status}
+            values={values}
+          />
         </div>
       </div>
     </main>

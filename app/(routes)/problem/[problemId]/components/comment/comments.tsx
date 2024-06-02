@@ -1,5 +1,5 @@
 import {auth} from "auth"
-import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
+import {type ProblemExtends} from "@/types"
 
 import {Comment} from "./comment"
 import {CommentForm} from "./comment-form"
@@ -17,7 +17,7 @@ export const Comments: React.FC<CommentsProps> = async ({problem, isAuthorProble
     <div className="space-y-4">
       <CommentForm problemId={problem?.id} />
       {/* List of comments */}
-      {problem?.comments?.length > 0 && (
+      {problem?.comments && problem?.comments?.length > 0 ? (
         <div className="space-y-4">
           {problem?.comments?.map((comment) => (
             <Comment
@@ -28,7 +28,7 @@ export const Comments: React.FC<CommentsProps> = async ({problem, isAuthorProble
             />
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

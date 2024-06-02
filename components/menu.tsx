@@ -22,7 +22,7 @@ import {ButtonCreateProblem} from "@components/button-create-problem"
 import {sortOptions} from "@components/list-command"
 import {Button} from "@ui/button"
 
-export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
+export function Menu({tags, user}: {tags?: Tag[] | null; user?: ExtendsUser | null}) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const selectedTags = searchParams.get("tags")?.split(",") ?? []

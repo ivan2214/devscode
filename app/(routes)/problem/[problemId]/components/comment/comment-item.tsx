@@ -1,5 +1,5 @@
 import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
-import {type ReplyExtends, type CommentExtends} from "@/data/problem/get-filtered-problems"
+import {type ReplyExtends, type CommentExtends} from "@/types"
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip"
 
 import {ButtonCommentDelete} from "./button-comment-delete"

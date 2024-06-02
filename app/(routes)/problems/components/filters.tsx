@@ -6,7 +6,7 @@ import {FilterSelectItemsPerPage} from "@/app/(routes)/problems/components/filte
 import {FilterDropDownOrder} from "@/app/(routes)/problems/components/filter-drop-down-order"
 
 interface FiltersProps {
-  tags: Tag[]
+  tags: Tag[] | []
 }
 
 export default function Filters({tags}: FiltersProps) {

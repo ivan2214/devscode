@@ -14,7 +14,7 @@ import {TagIcon, TagIcons} from "@/components/ui/tag-icon"
 import Icon from "@/components/ui/icon"
 
 interface FilterDropDownTagProps {
-  tags: Tag[]
+  tags: Tag[] | []
 }
 
 export const FilterDropDownTag: React.FC<FilterDropDownTagProps> = ({tags}) => {

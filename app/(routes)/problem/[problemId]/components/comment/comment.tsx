@@ -1,5 +1,5 @@
 import {ScrollArea} from "@ui/scroll-area"
-import {type CommentExtends} from "@/data/problem/get-filtered-problems"
+import {type CommentExtends} from "@/types"
 
 import {CommentItem} from "./comment-item"
 
