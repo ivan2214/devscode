@@ -9,7 +9,7 @@
 2. **Clona el Repositorio**: Clona tu repositorio recién creado a tu máquina local utilizando el comando:
 
     ```bash
-    git clone https://github.com/TU_USUARIO/devscode.git
+    git clone https://github.com/ivan2214/devscode.git
     ```
 
 3. **Crea una Rama (Branch)**: Crea una rama para trabajar en tu contribución utilizando un nombre descriptivo. Por ejemplo:
