@@ -21,20 +21,30 @@ export const FilterDropDownTag: React.FC<FilterDropDownTagProps> = ({tags}) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
-  const selectedTags: string[] = []
+  const selectedTags = searchParams.get("tags")?.split(",") ?? []
 
   const handleTagSelection = (tagName: string) => {
-    const newParams = new URLSearchParams(searchParams.toString())
+    const newParams = new URLSearchParams(searchParams?.toString())
+    const updatedTags = [...selectedTags]
+    const tagIndex = updatedTags.indexOf(tagName)
 
-    if (tagName === "all") {
+    if (tagIndex === -1) {
+      updatedTags.push(tagName)
+    } else {
+      updatedTags.splice(tagIndex, 1)
+    }
+
+    if (updatedTags.length > 0) {
+      newParams.set("tags", updatedTags.map((tag) => tag).join(","))
+    } else {
       newParams.delete("tags")
     }
 
-    if (tagName !== "all") {
-      newParams.set("tags", tagName)
-    }
+    const includesOfferPage = pathname?.includes("problems")
+    const pathNameDefined = !includesOfferPage ? `/problems${pathname}` : pathname
 
-    router.push(createUrl(pathname, newParams))
+    router.push(createUrl(pathNameDefined, newParams))
+    router.refresh()
   }
 
   return (
