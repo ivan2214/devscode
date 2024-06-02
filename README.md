@@ -1,37 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Contribuir a [Nombre del Proyecto]
 
-## Getting Started
+¡Gracias por tu interés en contribuir a [Nombre del Proyecto]! Estamos emocionados de recibir tu ayuda. Antes de comenzar, por favor, lee las siguientes pautas para contribuir.
 
-First, run the development server:
+## Cómo Contribuir
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Fork el Repositorio**: Haz clic en el botón "Fork" en la esquina superior derecha de esta página para copiar este repositorio en tu cuenta de GitHub.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Clona el Repositorio**: Clona tu repositorio recién creado a tu máquina local utilizando el comando:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    ```bash
+    git clone https://github.com/TU_USUARIO/[Nombre del Proyecto].git
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. **Crea una Rama (Branch)**: Crea una rama para trabajar en tu contribución utilizando un nombre descriptivo. Por ejemplo:
 
-## Learn More
+    ```bash
+    git checkout -b mi-contribucion
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Haz tus Cambios**: Realiza tus cambios en la rama que has creado. Asegúrate de seguir las convenciones de commits convencionales para mantener un registro claro de tus cambios.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Realiza Commits**: Utiliza commits convencionales para describir tus cambios de forma clara y semántica. Aquí tienes algunas pautas:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    - **feat**: para nuevas características.
+    - **fix**: para correcciones de errores.
+    - **docs**: para cambios en la documentación.
+    - **chore**: para tareas de mantenimiento.
+    - **refactor**: para cambios en el código que no agregan ni corrigen ninguna funcionalidad.
 
-## Deploy on Vercel
+    Por ejemplo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    git commit -m "feat: Agregar nueva función de XYZ"
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# devscode
+6. **Envía tus Cambios**: Una vez que hayas completado tus cambios, asegúrate de enviarlos a tu repositorio remoto:
+
+    ```bash
+    git push origin mi-contribucion
+    ```
+
+7. **Envía un Pull Request (PR)**: Ve a tu repositorio en GitHub y haz clic en el botón "Pull Request". Describe tus cambios y envía tu PR para que podamos revisarlo.
+
+## Versionado Semántico
+
+Este proyecto sigue el enfoque de versionado semántico para numerar las versiones de software. Aquí tienes una breve descripción de cómo se incrementan los números de versión:
+
+- **Mayor (Major)**: Para cambios grandes que pueden afectar la compatibilidad con versiones anteriores.
+- **Menor (Minor)**: Para nuevas funcionalidades o mejoras sin romper nada existente.
+- **Parche (Patch)**: Para correcciones de errores o soluciones sin añadir nuevas funciones.
+
+¡Gracias por tu contribución y por ayudar a hacer de [Nombre del Proyecto] un mejor software!
+
