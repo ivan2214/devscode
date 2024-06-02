@@ -21,41 +21,14 @@ import AuthButtons from "@components/auth-options"
 
 import {ButtonCreateProblem} from "./button-create-problem"
 import {sortOptions} from "./list-command"
-
-const filterOptions = [
-  {
-    name: "Nuevos",
-    value: "new",
-  },
-  {
-    name: "Gratis",
-    value: "free",
-  },
-
-  {
-    name: "Todos",
-    value: "all",
-  },
-  {
-    name: "Recomendados",
-    value: "recommended",
-  },
-  {
-    name: "Destacados",
-    value: "featured",
-  },
-  {
-    name: "Mas vendidos",
-    value: "most_sold",
-  },
-]
+import {Button} from "./ui/button"
 
 export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const selectedTags = searchParams.get("tags")?.split(",") ?? []
   const selectedSortValues = searchParams.get("sort")?.split(",")
-  const selectedFilterValues = searchParams.get("filter")
+
   const router = useRouter()
 
   const handleTagClick = (tagValue: string) => {
@@ -93,46 +66,20 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
     router.refresh()
   }
 
-  const handleFilterClick = (filterValue: string) => {
-    const newParams = new URLSearchParams(searchParams?.toString())
-
-    newParams.set("filter", filterValue)
-    const includesOfferPage = pathname?.includes("problems")
-    const pathNameDefined = !includesOfferPage ? `/problems${pathname}` : pathname
-
-    router.push(createUrl(pathNameDefined, newParams))
-    router.refresh()
-  }
-
   return (
     <Menubar className="container flex w-full items-center justify-between rounded-none border-b border-none px-2 py-8 lg:px-4">
       <div className="flex items-center gap-2">
-        <Link className="font-bold" href="/">
-          Inicio
-        </Link>
+        <Button role="link" variant="link">
+          <Link href="/">Inicio</Link>
+        </Button>
+        <Button role="link" variant="link">
+          <Link href="/problems">Problemas</Link>
+        </Button>
         <MenubarMenu>
-          <MenubarTrigger className="font-bold">Filtros</MenubarTrigger>
+          <MenubarTrigger className="cursor-pointer font-bold hover:underline">
+            Filtros
+          </MenubarTrigger>
           <MenubarContent>
-            <MenubarSub>
-              <MenubarSubTrigger>Filters</MenubarSubTrigger>
-              <MenubarSubContent className="w-[230px]">
-                {filterOptions.map((filter) => (
-                  <MenubarItem
-                    key={filter.value}
-                    className={cn(
-                      "text-sm transition-colors duration-300 hover:underline",
-                      selectedFilterValues?.includes(filter.value) &&
-                        "underline decoration-primary underline-offset-4",
-                    )}
-                    onClick={() => {
-                      handleFilterClick(filter.value)
-                    }}
-                  >
-                    {filter.name}
-                  </MenubarItem>
-                ))}
-              </MenubarSubContent>
-            </MenubarSub>
             <MenubarSeparator />
             <MenubarSeparator />
             <MenubarSub>
@@ -178,7 +125,6 @@ export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
             </MenubarSub>
           </MenubarContent>
         </MenubarMenu>
-        <Link href="/problems">problemas</Link>
       </div>
       <section className="hidden items-center gap-2 md:flex">
         {!user && <AuthButtons />}

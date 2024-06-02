@@ -4,7 +4,6 @@ import {useEffect, useState} from "react"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {type z} from "zod"
 import {useForm} from "react-hook-form"
-import {ArrowRightIcon, PlusIcon} from "lucide-react"
 
 import Icon from "@ui/icon"
 import {useManageAccountUserModal} from "@/store/use-manage-account-user-modal"
@@ -64,7 +63,10 @@ export const ManageAccountUserForm = () => {
               </div>
               <span className="text-sm font-light">{data?.values.name || data?.values.email}</span>
             </div>
-            <ArrowRightIcon className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
+            <Icon
+              className="h-4 w-4 opacity-0 transition group-hover:opacity-100"
+              name="arrow-right"
+            />
           </Button>
         </div>
 
@@ -121,9 +123,9 @@ export const ManageAccountUserForm = () => {
           variant="outline"
         >
           <div className="flex items-center gap-x-3">
-            <PlusIcon className="h-4 w-4" /> Connect account
+            <Icon className="h-4 w-4" name="plus" /> Connect account
           </div>
-          <ArrowRightIcon className="h-4 w-4" />
+          <Icon className="h-4 w-4" name="arrow-right" />
         </Button>
 
         {/* danger  */}

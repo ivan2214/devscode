@@ -5,8 +5,8 @@ import type * as z from "zod"
 import {useState, useTransition} from "react"
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import {EyeIcon, EyeOffIcon} from "lucide-react"
 
+import Icon from "@ui/icon"
 import {RegisterSchema} from "@schemas/index"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@ui/form"
 import CardWrapper from "@components/auth/card-wrapper"
@@ -126,13 +126,15 @@ export const RegisterForm = () => {
                         {...field}
                       />
                       {viewPassword ? (
-                        <EyeOffIcon
+                        <Icon
                           className="cursor-pointer"
+                          name="eye"
                           onClick={() => setViewPassword(!viewPassword)}
                         />
                       ) : (
-                        <EyeIcon
+                        <Icon
                           className="cursor-pointer"
+                          name="eye-off"
                           onClick={() => setViewPassword(!viewPassword)}
                         />
                       )}
@@ -160,13 +162,15 @@ export const RegisterForm = () => {
                         {...field}
                       />
                       {viewPassword ? (
-                        <EyeOffIcon
+                        <Icon
                           className="cursor-pointer"
+                          name="eye"
                           onClick={() => setViewPassword(!viewPassword)}
                         />
                       ) : (
-                        <EyeIcon
+                        <Icon
                           className="cursor-pointer"
+                          name="eye-off"
                           onClick={() => setViewPassword(!viewPassword)}
                         />
                       )}

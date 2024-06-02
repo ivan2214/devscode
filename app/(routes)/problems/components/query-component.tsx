@@ -1,5 +1,5 @@
 "use client"
-import {Loader2Icon, TrashIcon} from "lucide-react"
+
 import {usePathname, useRouter} from "next/navigation"
 import {useState} from "react"
 
@@ -7,6 +7,7 @@ import {Badge} from "@ui/badge"
 import {Button} from "@ui/button"
 import {type QueryProps} from "@/data/problem/get-filtered-problems"
 import {TagIcon, TagIcons} from "@/components/ui/tag-icon"
+import Icon from "@/components/ui/icon"
 
 interface QueryComponentProps {
   searchParams?: QueryProps
@@ -14,7 +15,7 @@ interface QueryComponentProps {
 
 export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) => {
   const [isLoading, setIsLoading] = useState(false)
-  const {tags, keyword, status, skip, sortBy, sortByType, take} = searchParams ?? {}
+  const {tags, keyword, status, sortBy, sortByType, take} = searchParams ?? {}
   const router = useRouter()
   const pathname = usePathname()
   let tagsArray = tags?.split(",")
@@ -99,7 +100,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 >
                   {isValidIcon ? <TagIcon className="h-4 w-4" name={tag} /> : null}
                   {tag}
-                  <TrashIcon className="h-4 w-4 text-destructive" />
+                  <Icon className="h-4 w-4 text-destructive" name="trash" />
                 </Button>
               )
             })
@@ -118,7 +119,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 })
               }}
             >
-              <TrashIcon className="h-4 w-4 text-destructive" />
+              <Icon className="h-4 w-4 text-destructive" name="trash" />
             </Button>
           </Badge>
         ) : null}
@@ -136,7 +137,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 })
               }}
             >
-              <TrashIcon className="h-4 w-4 text-destructive" />
+              <Icon className="h-4 w-4 text-destructive" name="trash" />
             </Button>
           </Badge>
         ) : null}
@@ -154,7 +155,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 })
               }}
             >
-              <TrashIcon className="h-4 w-4 text-destructive" />
+              <Icon className="h-4 w-4 text-destructive" name="trash" />
             </Button>
           </Badge>
         ) : null}
@@ -172,7 +173,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 })
               }}
             >
-              <TrashIcon className="h-4 w-4 text-destructive" />
+              <Icon className="h-4 w-4 text-destructive" name="trash" />
             </Button>
           </Badge>
         ) : null}
@@ -190,7 +191,7 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
                 })
               }}
             >
-              <TrashIcon className="h-4 w-4 text-destructive" />
+              <Icon className="h-4 w-4 text-destructive" name="trash" />
             </Button>
           </Badge>
         ) : null}
@@ -201,9 +202,9 @@ export const QueryComponent: React.FC<QueryComponentProps> = ({searchParams}) =>
         variant="destructive"
         onClick={clearAll}
       >
-        {isLoading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : null}
+        {isLoading ? <Icon className="h-4 w-4 animate-spin" name="loader" /> : null}
         {!isLoading ? "Borrar todos" : "Borrando..."}
-        <TrashIcon className="h-4 w-4" />
+        <Icon className="h-4 w-4" name="trash" />
       </Button>
     </div>
   )

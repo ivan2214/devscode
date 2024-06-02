@@ -1,5 +1,4 @@
-import {Loader} from "lucide-react"
-
+import Icon from "@ui/icon"
 import {Button} from "@ui/button"
 
 interface FormActionsProps {
@@ -20,7 +19,7 @@ export const FormActions: React.FC<FormActionsProps> = ({
       Cancelar
     </Button>
     <Button disabled={isPending} type="submit">
-      {isPending ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
+      {isPending ? <Icon className="mr-2 h-4 w-4 animate-spin" name="loader" /> : null}
       {isPending ? buttonLoadingTitle : buttonTitle}
     </Button>
   </div>

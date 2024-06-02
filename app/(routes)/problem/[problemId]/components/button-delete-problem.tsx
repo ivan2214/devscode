@@ -1,6 +1,5 @@
 "use client"
 
-import {LoaderIcon, TrashIcon} from "lucide-react"
 import {useTransition} from "react"
 import {toast} from "sonner"
 
@@ -17,6 +16,7 @@ import {
   AlertDialogTrigger,
 } from "@ui/alert-dialog"
 import {deleteProblem} from "@/actions/problem/delete-problem"
+import Icon from "@/components/ui/icon"
 
 interface ButtonDeleteProblemProps {
   problemId: string
@@ -45,7 +45,7 @@ export const ButtonDeleteProblem: React.FC<ButtonDeleteProblemProps> = ({problem
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button className="flex items-center gap-x-2" variant="outline">
-          <TrashIcon className="h-4 w-4" />
+          <Icon className="h-4 w-4" name="trash" />
           Borrar problema
         </Button>
       </AlertDialogTrigger>
@@ -60,7 +60,7 @@ export const ButtonDeleteProblem: React.FC<ButtonDeleteProblemProps> = ({problem
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction className="bg-destructive text-white" onClick={onClick}>
-            {isPending ? <LoaderIcon className="h-4 w-4 animate-spin" /> : null}
+            {isPending ? <Icon className="h-4 w-4 animate-spin" name="loader" /> : null}
             {isPending ? "Eliminando..." : "Eliminar problema"}
           </AlertDialogAction>
         </AlertDialogFooter>

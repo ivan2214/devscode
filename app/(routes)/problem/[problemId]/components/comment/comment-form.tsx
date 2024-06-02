@@ -2,11 +2,11 @@
 
 import type * as z from "zod"
 
-import {PlusIcon} from "lucide-react"
 import {useState, useTransition} from "react"
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {toast} from "sonner"
+import {Icon} from "lucide-react"
 
 import {Button} from "@ui/button"
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@ui/form"
@@ -66,7 +66,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({problemId}) => {
           variant="outline"
           onClick={() => startTransition(() => setAddComment(!addComment))}
         >
-          <PlusIcon className="h-4 w-4" />
+          <Icon className="h-4 w-4" name="plus" />
           Añadir comentario
         </Button>
       </div>
@@ -95,7 +95,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({problemId}) => {
             />
 
             <Button disabled={isPending} type="submit">
-              <PlusIcon className="h-4 w-4" />
+              <Icon className="h-4 w-4" name="plus" />
               Enviar
             </Button>
           </form>

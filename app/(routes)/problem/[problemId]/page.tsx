@@ -1,4 +1,3 @@
-import {ClockIcon, FlagIcon, MailIcon, ShareIcon, TagIcon, UserIcon} from "lucide-react"
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
 import hljs from "highlight.js"
@@ -11,6 +10,7 @@ import {db} from "@/lib/db"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 import {Badge} from "@/components/ui/badge"
+import Icon from "@/components/ui/icon"
 
 import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
 import {ButtonChangeStatus} from "./components/button-change-status"
@@ -153,7 +153,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <TagIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="tag" />
                 <span className="text-sm font-medium">Categorías:</span>
                 {problem.tags.map((tags) => (
                   <Badge key={tags.tag.id}>{tags.tag.name}</Badge>
@@ -161,7 +161,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               </div>
 
               <div className="flex items-center gap-2">
-                <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="user" />
                 <span className="text-sm font-medium">Creado por:</span>
                 <TooltipProvider>
                   <Tooltip>
@@ -203,7 +203,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               </div>
               {problem.ProblemsResolved.length ? (
                 <div className="flex items-center gap-2">
-                  <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                  <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="check" />
                   <span className="text-sm font-medium">Resuelto por:</span>
                   {problem.ProblemsResolved.map((problemResolved) => (
                     <TooltipProvider key={problemResolved.id}>
@@ -251,21 +251,21 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <ClockIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="calendar" />
                 <span className="text-sm font-medium">Creado:</span>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(problem.createdAt).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <ClockIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="clock" />
                 <span className="text-sm font-medium">Ultima actualización:</span>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(problem.updatedAt).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <FlagIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="flag" />
                 <span className="text-sm font-medium">Estado:</span>
                 <span className="text-sm text-gray-500 dark:text-gray-400">{problem.status}</span>
               </div>
@@ -311,11 +311,11 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
             ) : null}
             <div className="flex gap-2">
               <Button className="flex items-center gap-x-2" size="sm" variant="outline">
-                <ShareIcon className="h-4 w-4" />
+                <Icon className="h-4 w-4" name="share" />
                 Share
               </Button>
               <Button className="flex items-center gap-x-2" size="sm" variant="outline">
-                <MailIcon className="h-4 w-4" />
+                <Icon className="h-4 w-4" name="mail" />
                 Email
               </Button>
             </div>

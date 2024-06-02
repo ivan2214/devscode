@@ -1,6 +1,5 @@
 "use client"
 import {type Tag} from "@prisma/client"
-import {FilterIcon} from "lucide-react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
 
 import {Button} from "@/components/ui/button"
@@ -12,6 +11,7 @@ import {
 } from "@ui/dropdown-menu"
 import {createUrl} from "@/lib/utils"
 import {TagIcon, TagIcons} from "@/components/ui/tag-icon"
+import Icon from "@/components/ui/icon"
 
 interface FilterDropDownTagProps {
   tags: Tag[]
@@ -51,7 +51,7 @@ export const FilterDropDownTag: React.FC<FilterDropDownTagProps> = ({tags}) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <FilterIcon className="mr-2 h-4 w-4" />
+          <Icon className="mr-2 h-4 w-4" name="filter" />
           Filter by tag
         </Button>
       </DropdownMenuTrigger>

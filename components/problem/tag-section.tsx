@@ -1,6 +1,6 @@
 import {type FieldArrayWithId, type UseFormReturn} from "react-hook-form"
-import {PlusIcon, TrashIcon} from "lucide-react"
 
+import Icon from "@ui/icon"
 import {FormDescription, FormField, FormLabel, FormMessage, FormControl, FormItem} from "@ui/form"
 import {Button} from "@ui/button"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
@@ -47,7 +47,7 @@ export const TagsSection: React.FC<TagsSectionProps> = ({
                       variant="destructive"
                       onClick={() => removeTag(index)}
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      <Icon className="h-4 w-4" name="trash" />
                     </Button>
                   </div>
                 </FormControl>
@@ -66,7 +66,7 @@ export const TagsSection: React.FC<TagsSectionProps> = ({
         variant="outline"
         onClick={() => appendTag({name: ""})}
       >
-        <PlusIcon className="mr-2 h-4 w-4" /> Añadir tag
+        <Icon className="mr-2 h-4 w-4" name="plus" /> Añadir tag
       </Button>
     </div>
   </section>

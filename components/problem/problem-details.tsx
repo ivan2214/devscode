@@ -3,7 +3,8 @@ import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {atomDark} from "react-syntax-highlighter/dist/esm/styles/prism"
 import Markdown from "react-markdown"
 import {type ControllerRenderProps} from "react-hook-form"
-import {CodeSquare} from "lucide-react"
+
+import Icon from "@ui/icon"
 
 import {Button} from "../ui/button"
 import {Textarea} from "../ui/textarea"
@@ -85,7 +86,7 @@ const ProblemDetails: React.FC<ProblemDetailsProps> = ({field}) => {
                 variant="ghost"
                 onClick={addBlockCode}
               >
-                <CodeSquare className="h-5 w-5" />
+                <Icon className="h-5 w-5" name="code" />
               </Button>
             </div>
           </div>

@@ -1,11 +1,11 @@
 "use client"
 
-import {PencilIcon} from "lucide-react"
 import {type Tag} from "@prisma/client"
 
 import {Button} from "@ui/button"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
 import {useUpdateProblemModal} from "@/store/use-update-problem-modal"
+import Icon from "@/components/ui/icon"
 
 interface ButtonOpenModalEditProps {
   problemId: string
@@ -23,7 +23,7 @@ export const ButtonOpenModalEdit: React.FC<ButtonOpenModalEditProps> = ({problem
       variant="outline"
       onClick={() => openEditModal(problemId, values)}
     >
-      <PencilIcon className="h-4 w-4" />
+      <Icon className="h-4 w-4" name="pencil" />
       Editar problema
     </Button>
   )

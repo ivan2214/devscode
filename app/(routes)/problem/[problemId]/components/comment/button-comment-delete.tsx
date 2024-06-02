@@ -1,11 +1,11 @@
 "use client"
 
-import {Trash2Icon} from "lucide-react"
 import {toast} from "sonner"
 import {useTransition} from "react"
 
 import {Button} from "@ui/button"
 import {deleteComment} from "@/actions/comment/delete-comment"
+import Icon from "@/components/ui/icon"
 
 interface ButtonCommentDeleteProps {
   commentId?: string
@@ -36,7 +36,7 @@ export const ButtonCommentDelete: React.FC<ButtonCommentDeleteProps> = ({comment
 
   return (
     <Button disabled={isPending} size="icon" type="button" variant="ghost" onClick={onClick}>
-      <Trash2Icon className="h-4 w-4 text-destructive" />
+      <Icon className="h-4 w-4 text-destructive" name="trash" />
     </Button>
   )
 }

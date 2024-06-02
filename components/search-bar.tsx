@@ -1,8 +1,8 @@
 "use client"
 
-import {SearchIcon} from "lucide-react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
 
+import Icon from "@ui/icon"
 import {Input} from "@ui/input"
 import {createUrl} from "@/lib/utils"
 
@@ -32,7 +32,7 @@ export const SearchBar = () => {
     <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <form onSubmit={onSubmit}>
         <div className="relative">
-          <SearchIcon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Icon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" name="search" />
           <Input
             key={searchParams?.get("search")}
             autoComplete="off"

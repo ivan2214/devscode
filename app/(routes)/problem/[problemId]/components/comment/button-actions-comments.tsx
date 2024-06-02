@@ -2,12 +2,12 @@
 
 import type * as z from "zod"
 
-import {ThumbsDownIcon, ThumbsUpIcon} from "lucide-react"
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useTransition} from "react"
 import {toast} from "sonner"
 
+import Icon from "@components/ui/icon"
 import {Button} from "@ui/button"
 import {CommentActionSchema} from "@/schemas"
 import {actionsComment} from "@/actions/comment/actions-comment"
@@ -85,7 +85,7 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({
           onSubmit(form.getValues())
         }}
       >
-        <ThumbsUpIcon className="h-4 w-4" />
+        <Icon className="h-4 w-4" name="thumbs-up" />
         <span className="sr-only">Like</span>
         {getLikes({comment, isReply, reply})}
       </Button>
@@ -102,7 +102,7 @@ export const ButtonActionsComments: React.FC<ButtonActionsCommentsProps> = ({
           onSubmit(form.getValues())
         }}
       >
-        <ThumbsDownIcon className="h-4 w-4" />
+        <Icon className="h-4 w-4" name="thumbs-down" />
         <span className="sr-only">Dislike</span>
         {getDislikes({comment, isReply, reply})}
       </Button>

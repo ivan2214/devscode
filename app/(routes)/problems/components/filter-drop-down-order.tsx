@@ -1,6 +1,5 @@
 "use client"
 
-import {ListOrderedIcon} from "lucide-react"
 import {usePathname, useRouter, useSearchParams} from "next/navigation"
 
 import {
@@ -13,6 +12,7 @@ import {Button} from "@ui/button"
 import {type SortByOptions} from "@/data/problem/get-filtered-problems"
 import {createUrl} from "@/lib/utils"
 import {sortOptions} from "@/components/list-command"
+import Icon from "@/components/ui/icon"
 
 export const FilterDropDownOrder = ({}) => {
   const pathname = usePathname()
@@ -46,7 +46,7 @@ export const FilterDropDownOrder = ({}) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            <ListOrderedIcon className="mr-2 h-4 w-4" />
+            <Icon className="mr-2 h-4 w-4" name="list-ordered" />
             {selectedSort ? selectedSort : "Sort by"}
           </Button>
         </DropdownMenuTrigger>
@@ -71,7 +71,7 @@ export const FilterDropDownOrder = ({}) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            <ListOrderedIcon className="mr-2 h-4 w-4" />
+            <Icon className="mr-2 h-4 w-4" name="list-ordered" />
             {selectedSortType ? selectedSortType : "Sort by type"}
           </Button>
         </DropdownMenuTrigger>
