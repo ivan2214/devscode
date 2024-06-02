@@ -1,7 +1,8 @@
 import {Separator} from "@ui/separator"
-import {type QueryProps, getFilteredProblems} from "@/data/problem/get-filtered-problems"
 import {QueryComponent} from "@/app/(routes)/problems/components/query-component"
 import {CardProblem} from "@components/card-problem"
+import {type QueryProps} from "@/types"
+import {getFilteredProblems} from "@/data/problem/get-filtered-problems"
 
 export default async function ProblemsPage({searchParams}: {searchParams?: QueryProps}) {
   const {problems} = await getFilteredProblems(searchParams)

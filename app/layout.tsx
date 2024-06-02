@@ -1,6 +1,7 @@
 import "./globals.css"
 import {Inter as FontSans} from "next/font/google"
 import {Suspense, type ReactNode} from "react"
+import {type Metadata} from "next"
 
 import {Toaster} from "@ui/sonner"
 import {cn} from "@/lib/utils"
@@ -11,6 +12,7 @@ import {ThemeProvider} from "@/providers/theme-provider"
 import {ModalProvider} from "@/providers/modal-provider"
 import SearchBarFallback from "@components/fallbacks/search-bar-fallback"
 import {Menu} from "@components/menu"
+import {ClientOnly} from "@/components/client-only"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -19,6 +21,15 @@ const fontSans = FontSans({
 
 interface RootLayoutProps {
   children: ReactNode
+}
+
+export const metadata: Metadata = {
+  title: "DevsCode",
+  description:
+    "Comunidad de programadores de todo el mundo donde aprendemos y compartimos soluciones de programación.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 }
 
 export default async function RootLayout({children}: RootLayoutProps) {
@@ -30,9 +41,16 @@ export default async function RootLayout({children}: RootLayoutProps) {
   return (
     <html suppressHydrationWarning lang="es">
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-        <ThemeProvider enableSystem attribute="class" defaultTheme="dark">
-          <ModalProvider />
-          <Toaster />
+        <ThemeProvider
+          disableTransitionOnChange
+          enableSystem
+          attribute="class"
+          defaultTheme="system"
+        >
+          <ClientOnly>
+            <ModalProvider />
+            <Toaster />
+          </ClientOnly>
           <Suspense fallback={<SearchBarFallback />}>
             <Menu tags={tags} user={user} />
           </Suspense>

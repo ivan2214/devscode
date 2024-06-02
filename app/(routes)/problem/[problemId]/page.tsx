@@ -1,6 +1,7 @@
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter"
 import {vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism"
 import hljs from "highlight.js"
+import {type Metadata} from "next"
 
 import {Button} from "@ui/button"
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@ui/tooltip"
@@ -8,9 +9,10 @@ import {Avatar, AvatarFallback, AvatarImage} from "@ui/avatar"
 import {auth} from "auth"
 import {db} from "@/lib/db"
 import {type CreateProblemFormValues} from "@components/problem/problem-form"
-import {type ProblemExtends} from "@/data/problem/get-filtered-problems"
 import {Badge} from "@/components/ui/badge"
 import Icon from "@/components/ui/icon"
+import {getProblem} from "@/data/problem/get-problem"
+import {type ProblemExtends} from "@/types"
 
 import {ButtonOpenModalEdit} from "./components/button-open-modal-edit"
 import {ButtonChangeStatus} from "./components/button-change-status"
@@ -35,6 +37,47 @@ export async function generateStaticParams({params: {prblemId}}: {params: {prble
   }))
 }
 
+export const generateMetadata = async ({
+  params: {problemId},
+}: ProblemPageProps): Promise<Metadata> => {
+  const {problem} = await getProblem(problemId)
+
+  return {
+    title: problem?.title,
+    description: problem?.description,
+    openGraph: {
+      title: problem?.title,
+      description: problem?.description,
+      type: "website",
+      url: `${process.env.PAGE_URL}/problem/${problemId}`,
+      siteName: "Devs Code",
+      locale: "es-AR",
+      countryName: "Argentina",
+    },
+    twitter: {
+      card: "summary",
+      title: problem?.title,
+      description: problem?.description,
+
+      site: `${process.env.PAGE_URL}/problem/${problemId}`,
+      creator: "@DevsCode",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    alternates: {
+      canonical: `${process.env.PAGE_URL}/problem/${problemId}`,
+    },
+    keywords: problem?.tags?.map(({tag}) => tag.name),
+    authors: [{name: "Devs Code", url: "https://Devscode.dev"}],
+  }
+}
+
 const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
   const session = await auth()
   const userId = session?.user?.id
@@ -44,66 +87,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
     return <div>Problem not found</div>
   }
 
-  const problem = await db.problem.findUnique({
-    where: {
-      id: problemId,
-    },
-    include: {
-      comments: {
-        include: {
-          author: {
-            include: {
-              _count: {
-                select: {
-                  problemsResolved: true,
-                },
-              },
-            },
-          },
-          reply: {
-            include: {
-              userReply: {
-                include: {
-                  _count: {
-                    select: {
-                      problemsResolved: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      user: {
-        include: {
-          _count: {
-            select: {
-              problemsResolved: true,
-            },
-          },
-        },
-      },
-      ProblemsResolved: {
-        include: {
-          resolver: {
-            include: {
-              _count: {
-                select: {
-                  problemsResolved: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  const {problem} = await getProblem(problemId)
 
   if (!problem) {
     return <div>Problem not found</div>
@@ -116,8 +100,8 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
     code: problem.code || "",
     description: problem.description,
     title: problem.title,
-    tagNames: problem.tags.map((tags) => ({
-      name: tags.tag.name,
+    tagNames: problem.tags?.map((tags) => ({
+      name: tags?.tag.name,
     })),
   }
 
@@ -155,9 +139,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
               <div className="flex items-center gap-2">
                 <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="tag" />
                 <span className="text-sm font-medium">Categorías:</span>
-                {problem.tags.map((tags) => (
-                  <Badge key={tags.tag.id}>{tags.tag.name}</Badge>
-                ))}
+                {problem.tags?.map((tags) => <Badge key={tags?.tag.id}>{tags?.tag.name}</Badge>)}
               </div>
 
               <div className="flex items-center gap-2">
@@ -192,7 +174,7 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
                           <div className="flex items-center gap-x-2">
                             <span className="text-sm font-bold">Problemas resueltos:</span>
                             <span className="text-sm text-gray-500 dark:text-gray-400">
-                              {problem.user?._count.problemsResolved.toString()}
+                              {problem.user?._count.problemsResolved?.toString()}
                             </span>
                           </div>
                         </section>
@@ -201,11 +183,11 @@ const ProblemPage: React.FC<ProblemPageProps> = async ({params}) => {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              {problem.ProblemsResolved.length ? (
+              {problem?.ProblemsResolved?.length ? (
                 <div className="flex items-center gap-2">
                   <Icon className="h-5 w-5 text-gray-500 dark:text-gray-400" name="check" />
                   <span className="text-sm font-medium">Resuelto por:</span>
-                  {problem.ProblemsResolved.map((problemResolved) => (
+                  {problem.ProblemsResolved?.map((problemResolved) => (
                     <TooltipProvider key={problemResolved.id}>
                       <Tooltip>
                         <TooltipTrigger>

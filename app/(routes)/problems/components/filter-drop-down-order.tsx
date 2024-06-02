@@ -9,7 +9,7 @@ import {
   DropdownMenuCheckboxItem,
 } from "@ui/dropdown-menu"
 import {Button} from "@ui/button"
-import {type SortByOptions} from "@/data/problem/get-filtered-problems"
+import {type SortByOptions} from "@/types"
 import {createUrl} from "@/lib/utils"
 import {sortOptions} from "@/components/list-command"
 import Icon from "@/components/ui/icon"

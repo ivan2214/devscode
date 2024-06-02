@@ -7,7 +7,7 @@ import {useEffect, useState} from "react"
 import {ListCommandWrapper} from "@components/list-command-wrapper"
 import {createUrl} from "@/lib/utils"
 import {useMediaQuery} from "@/hooks/use-media-query"
-import {type SortByOptions, type QueryProps} from "@/data/problem/get-filtered-problems"
+import {type SortByOptions, type QueryProps} from "@/types"
 
 interface SideFilterItemsProps {
   tags: Omit<Tag, "createdAt" | "updatedAt">[]

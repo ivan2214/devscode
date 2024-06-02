@@ -4,7 +4,8 @@ import {Button} from "@ui/button"
 import {Separator} from "@ui/separator"
 import {CardProblem} from "@components/card-problem"
 import {SideFilter} from "@components/side-filter"
-import {type QueryProps, getFilteredProblems} from "@/data/problem/get-filtered-problems"
+import {getFilteredProblems} from "@/data/problem/get-filtered-problems"
+import {type QueryProps} from "@/types"
 import {ActiveIa} from "@components/active-ia"
 
 export default async function Home({searchParams}: {searchParams?: QueryProps}) {

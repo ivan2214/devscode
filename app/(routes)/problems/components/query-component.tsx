@@ -5,7 +5,7 @@ import {useState} from "react"
 
 import {Badge} from "@ui/badge"
 import {Button} from "@ui/button"
-import {type QueryProps} from "@/data/problem/get-filtered-problems"
+import {type QueryProps} from "@/types"
 import {TagIcon, TagIcons} from "@/components/ui/tag-icon"
 import Icon from "@/components/ui/icon"
 

@@ -1,60 +1,7 @@
-import {
-  type Comment,
-  type User,
-  type Prisma,
-  type Tag,
-  type Status,
-  type Problem,
-  type TagsOnProblem,
-  type Reply,
-} from "@prisma/client"
+import {type Prisma} from "@prisma/client"
 
 import {db} from "@/lib/db"
-
-export type SortByOptions =
-  | "date"
-  | "likes"
-  | "dislikes"
-  | "title"
-  | "views"
-  | "comments"
-  | "ProblemsResolved"
-
-export interface QueryProps {
-  tags?: string
-  keyword?: string
-  sortBy?: SortByOptions
-  sortByType?: "desc" | "asc"
-  status?: Status
-  take?: string
-  skip?: string
-}
-
-export interface UserExtends extends User {
-  _count: {
-    problemsResolved: number
-  }
-}
-
-export interface CommentExtends extends Comment {
-  author?: UserExtends | null
-  reply?: ReplyExtends[] | null
-}
-
-export interface ReplyExtends extends Reply {
-  userReply?: UserExtends | null
-}
-
-export interface TagsOnProblemExtends extends TagsOnProblem {
-  tag: Tag
-  problem?: Problem | null
-}
-
-export interface ProblemExtends extends Problem {
-  user?: User | null
-  comments: CommentExtends[]
-  tags: TagsOnProblemExtends[]
-}
+import {type QueryProps, type ProblemExtends, type SortByOptions} from "@/types"
 
 export const getFilteredProblems = async (
   query?: QueryProps,
@@ -123,7 +70,15 @@ export const getFilteredProblems = async (
         ],
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            _count: {
+              select: {
+                problemsResolved: true,
+              },
+            },
+          },
+        },
         tags: {
           include: {
             tag: true,

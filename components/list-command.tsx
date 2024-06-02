@@ -13,7 +13,7 @@ import {
 import {TagIcon, TagIcons} from "@ui/tag-icon"
 import {Badge} from "@ui/badge"
 import Icon from "@ui/icon"
-import {type SortByOptions} from "@/data/problem/get-filtered-problems"
+import {type SortByOptions} from "@/types"
 import {cn} from "@/lib/utils"
 
 interface SortOption {

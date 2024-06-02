@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button"
 import Icon from "@/components/ui/icon"
-import {type QueryProps} from "@/data/problem/get-filtered-problems"
+import {type QueryProps} from "@/types"
 import {TagIcon, TagIcons} from "@ui/tag-icon"
 import {cn} from "@/lib/utils"
 

@@ -3,7 +3,7 @@ import {type Tag, type Status} from "@prisma/client"
 import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer"
 import {Button} from "@/components/ui/button"
 import {ListCommand} from "@/components/list-command"
-import {type QueryProps, type SortByOptions} from "@/data/problem/get-filtered-problems"
+import {type QueryProps, type SortByOptions} from "@/types"
 import {FilterButtons} from "@components/side-filter/filter-items-buttons"
 
 interface ListCommandWrapperProps {

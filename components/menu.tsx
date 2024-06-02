@@ -18,10 +18,9 @@ import {
   MenubarTrigger,
 } from "@ui/menubar"
 import AuthButtons from "@components/auth-options"
-
-import {ButtonCreateProblem} from "./button-create-problem"
-import {sortOptions} from "./list-command"
-import {Button} from "./ui/button"
+import {ButtonCreateProblem} from "@components/button-create-problem"
+import {sortOptions} from "@components/list-command"
+import {Button} from "@ui/button"
 
 export function Menu({tags, user}: {tags?: Tag[]; user?: ExtendsUser | null}) {
   const pathname = usePathname()
