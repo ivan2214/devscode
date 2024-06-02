@@ -14,87 +14,46 @@ import {TagIcon, TagIcons} from "@ui/tag-icon"
 import {Badge} from "@ui/badge"
 import Icon from "@ui/icon"
 import {type SortByOptions} from "@/data/problem/get-filtered-problems"
+import {cn} from "@/lib/utils"
 
 interface SortOption {
   value: SortByOptions
   label: string
-  type?: "asc" | "desc"
 }
 
 export const sortOptions: SortOption[] = [
   {
     value: "date",
-    label: "Fecha desc",
-    type: "desc",
-  },
-  {
-    value: "date",
-    label: "Fecha asc",
-    type: "asc",
+    label: "Fecha",
   },
   {
     value: "likes",
-    label: "Likes desc",
-    type: "desc",
+    label: "Likes",
   },
-  {
-    value: "likes",
-    label: "Likes asc",
-    type: "asc",
-  },
+
   {
     value: "dislikes",
-    label: "Dislikes desc",
-    type: "desc",
-  },
-  {
-    value: "dislikes",
-    label: "Dislikes asc",
-    type: "asc",
+    label: "Dislikes",
   },
   {
     value: "title",
-    label: "Título desc",
-    type: "desc",
-  },
-  {
-    value: "title",
-    label: "Título asc",
-    type: "asc",
+    label: "Título",
   },
   {
     value: "views",
-    label: "Vistas desc",
-    type: "desc",
-  },
-  {
-    value: "views",
-    label: "Vistas asc",
-    type: "asc",
+    label: "Vistas",
   },
   {
     value: "comments",
-    label: "Comentarios desc",
-    type: "desc",
-  },
-  {
-    value: "comments",
-    label: "Comentarios asc",
-    type: "asc",
+    label: "Comentarios",
   },
   {
     value: "ProblemsResolved",
-    label: "Problemas resueltos desc",
-    type: "desc",
-  },
-  {
-    value: "ProblemsResolved",
-    label: "Problemas resueltos asc",
-    type: "asc",
+    label: "Problemas resueltos",
   },
 ]
 
-interface StatusOption {
+export interface StatusOption {
   value: Status
   label: string
 }
@@ -197,8 +156,8 @@ export function ListCommand({
                 key={option.value}
                 value={option.value}
                 onSelect={() => {
-                  setSelectedSort(`${option.value}-${option.type}`)
-                  handleSortSelection(option.value, option.type)
+                  setSelectedSort(option.value)
+                  handleSortSelection(option.value)
                   setOpen(false)
                 }}
               >
@@ -209,6 +168,7 @@ export function ListCommand({
               </CommandItem>
             ))}
           </CommandGroup>
+          <CommandSeparator />
           <CommandGroup heading="Status">
             {statusOptions.map((option) => (
               <CommandItem
@@ -220,8 +180,17 @@ export function ListCommand({
                   setOpen(false)
                 }}
               >
-                <Badge className="flex w-full items-center gap-x-2" variant="outline">
-                  <Icon className="h-5 w-5" name="arrow-down-up" />
+                <Badge
+                  className={cn(
+                    "text-white",
+                    option.value === "solved"
+                      ? "bg-green-500"
+                      : option.value === "open"
+                        ? "bg-yellow-500"
+                        : "bg-red-500",
+                  )}
+                  variant="outline"
+                >
                   {option.label}
                 </Badge>
               </CommandItem>
@@ -285,13 +254,41 @@ export function ListCommand({
               key={option.value}
               value={option.value}
               onSelect={() => {
-                setSelectedSort(`${option.value}-${option.type}`)
-                handleSortSelection(option.value, option.type)
+                setSelectedSort(option.value)
+                handleSortSelection(option.value)
                 setOpen(false)
               }}
             >
               <Badge className="flex w-full items-center gap-x-2" variant="outline">
                 <Icon className="h-5 w-5" name="arrow-down-up" />
+                {option.label}
+              </Badge>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Status">
+          {statusOptions.map((option) => (
+            <CommandItem
+              key={option.value}
+              value={option.value}
+              onSelect={() => {
+                setSelectedStatus(option.label)
+                handleStatusSelection(option.value)
+                setOpen(false)
+              }}
+            >
+              <Badge
+                className={cn(
+                  "text-white",
+                  option.value === "solved"
+                    ? "bg-green-500"
+                    : option.value === "open"
+                      ? "bg-yellow-500"
+                      : "bg-red-500",
+                )}
+                variant="outline"
+              >
                 {option.label}
               </Badge>
             </CommandItem>

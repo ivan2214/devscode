@@ -14,7 +14,7 @@ export default async function Home({searchParams}: {searchParams?: QueryProps}) 
     <main className="container px-4 sm:px-6 lg:px-8">
       <section className="flex flex-col items-center py-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-y-5 space-y-4 lg:sticky lg:top-10 lg:max-w-xs">
-          <SideFilter searchParams={searchParams} />
+          <SideFilter />
           <ActiveIa />
         </div>
         <Separator orientation="vertical" />
